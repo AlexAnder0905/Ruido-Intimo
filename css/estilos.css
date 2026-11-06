@@ -801,9 +801,20 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round
   border-radius: var(--radio);
   box-shadow: var(--sombra);
   scroll-margin-top: calc(var(--cabecera-alto) + 16px);
-  animation: aparecer .45s ease both;
 }
-.capitulo-cab { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.capitulo-panel[hidden] { display: none; }
+/* La cabecera del capítulo acompaña la lectura: el botón para comprimir
+   queda siempre a mano, aunque el capítulo sea largo */
+.capitulo-cab {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  position: sticky; top: var(--cabecera-alto); z-index: 5;
+  margin: calc(-1 * clamp(18px, 3vw, 32px)) calc(-1 * clamp(18px, 3vw, 32px)) 0;
+  padding: clamp(18px, 3vw, 32px) clamp(18px, 3vw, 32px) 14px;
+  background: var(--papel);
+  border-radius: var(--radio) var(--radio) 0 0;
+  border-bottom: 1px solid var(--linea);
+}
+#capitulo-cerrar { border: 1px solid var(--linea); background: var(--verde-luz); color: var(--verde-texto); }
 .capitulo-cab h3 {
   display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 6px;
   font-family: var(--serif); font-weight: 400; font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.25rem); line-height: 1.1;

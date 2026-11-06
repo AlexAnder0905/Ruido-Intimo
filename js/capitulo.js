@@ -34,9 +34,18 @@
   const [desde, hasta] = (btn.dataset.destacar || '').split('-').map(Number);
 
   /* Servicio que entrega el texto (JSON: [{verse, text}, …]).
+     1.º se pide al propio sitio (/api/capitulo, función de Vercel que
+         trae el texto y lo guarda en caché): no depende de permisos
+         del servicio externo y es más rápido.
+     2.º si eso falla (o el sitio se abrió con doble clic), se pide
+         directo a bolls.life.
      La NBLA no está disponible ahí: se muestra la LBLA, su versión
      anterior de la misma editorial, y se avisa con claridad. */
-  const SERVICIO = (codigo) => `https://bolls.life/get-text/${codigo}/${libroId}/${cap}/`;
+  const enServidor = /^https?:$/.test(location.protocol);
+  const FUENTES = (codigo) => [
+    ...(enServidor ? [`/api/capitulo?v=${codigo}&libro=${libroId}&cap=${cap}`] : []),
+    `https://bolls.life/get-text/${codigo}/${libroId}/${cap}/`
+  ];
   const VERSIONES = {
     RVR1960: { codigo: 'RV1960', etiqueta: 'RVR1960', credito: 'Reina-Valera 1960 © Sociedades Bíblicas en América Latina, 1960. Renovado © Sociedades Bíblicas Unidas, 1988.' },
     NBLA:    { codigo: 'LBLA',   etiqueta: 'LBLA',    credito: 'La Biblia de las Américas (LBLA) © The Lockman Foundation.',
@@ -121,38 +130,86 @@
 
     if (cache[info.codigo]) { pintar(cache[info.codigo]); return; }
     cargando();
-    try {
-      const control = new AbortController();
-      const limite = setTimeout(() => control.abort(), 10000);
-      const r = await fetch(SERVICIO(info.codigo), { signal: control.signal });
-      clearTimeout(limite);
-      if (!r.ok) throw new Error('respuesta ' + r.status);
-      const datos = await r.json();
-      if (!Array.isArray(datos) || !datos.length) throw new Error('vacío');
-      cache[info.codigo] = datos;
-      if (miPedido === pedido) pintar(datos);
-    } catch (e) {
-      if (miPedido === pedido) error();
+    for (const url of FUENTES(info.codigo)) {
+      try {
+        const control = new AbortController();
+        const limite = setTimeout(() => control.abort(), 9000);
+        const r = await fetch(url, { signal: control.signal });
+        clearTimeout(limite);
+        if (!r.ok) throw new Error('respuesta ' + r.status);
+        const datos = await r.json();
+        if (!Array.isArray(datos) || !datos.length) throw new Error('vacío');
+        cache[info.codigo] = datos;
+        if (miPedido === pedido) pintar(datos);
+        return;
+      } catch (e) { /* se prueba la siguiente fuente */ }
     }
+    if (miPedido === pedido) error();
   }
 
-  function abrir(abiertoAhora) {
-    panel.hidden = !abiertoAhora;
-    btn.setAttribute('aria-expanded', abiertoAhora);
-    btn.classList.toggle('abierto', abiertoAhora);
-    accion.textContent = abiertoAhora ? `Ocultar ${libro} ${cap}` : `Leer ${libro} ${cap} completo`;
-    if (abiertoAhora) {
-      cargar(version);
-      panel.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
-    }
+  /* ---------- Desplegar y comprimir ----------
+     El capítulo se despliega justo bajo el botón, sin saltar a otra
+     parte de la página. Al comprimirlo, todo vuelve a su estado
+     original y, si la persona ya había bajado leyendo, la pantalla
+     regresa con suavidad al botón para no perder el lugar. */
+  const sinMovimiento = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let animacion = null;
+
+  function etiquetas(abierto) {
+    btn.setAttribute('aria-expanded', abierto);
+    btn.classList.toggle('abierto', abierto);
+    accion.textContent = abierto ? `Comprimir ${libro} ${cap}` : `Leer ${libro} ${cap} completo`;
   }
 
-  btn.addEventListener('click', () => abrir(panel.hidden));
-  document.getElementById('capitulo-cerrar').addEventListener('click', () => { abrir(false); btn.focus(); });
-  document.getElementById('capitulo-volver').addEventListener('click', () => {
-    abrir(false);
-    document.getElementById('pasaje').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
+  function desplegar() {
+    if (animacion) animacion.cancel();
+    etiquetas(true);
+    panel.hidden = false;
+    cargar(version);
+    if (sinMovimiento() || !panel.animate) return;
+    const alto = panel.scrollHeight;
+    animacion = panel.animate(
+      [{ height: '0px', opacity: 0, overflow: 'hidden' }, { height: alto + 'px', opacity: 1, overflow: 'hidden' }],
+      { duration: 420, easing: 'cubic-bezier(.2,.7,.2,1)' }
+    );
+    animacion.onfinish = () => { animacion = null; };
+  }
+
+  function comprimir(volver) {
+    if (panel.hidden) return;
+    if (animacion) animacion.cancel();
+    etiquetas(false);
+
+    const terminar = () => {
+      animacion = null;
+      panel.hidden = true;
+      if (volver) btn.focus({ preventScroll: true });
+    };
+
+    // Si la persona ya bajó leyendo y el botón quedó fuera de la vista,
+    // se comprime de una vez y la pantalla vuelve al pasaje, con el botón
+    // arriba: así no pasa de largo por el resto de la página.
+    const cabecera = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cabecera-alto')) || 72;
+    const arriba = btn.getBoundingClientRect().top;
+    if (arriba < cabecera) {
+      const destino = window.scrollY + arriba - cabecera - 24;
+      animacion = null;
+      panel.hidden = true;
+      window.scrollTo({ top: destino, behavior: 'instant' });
+      btn.focus({ preventScroll: true });
+      return;
+    }
+    if (sinMovimiento() || !panel.animate) { terminar(); return; }
+    animacion = panel.animate(
+      [{ height: panel.offsetHeight + 'px', opacity: 1, overflow: 'hidden' }, { height: '0px', opacity: 0, overflow: 'hidden' }],
+      { duration: 320, easing: 'cubic-bezier(.4,0,.2,1)' }
+    );
+    animacion.onfinish = terminar;
+  }
+
+  btn.addEventListener('click', () => (panel.hidden ? desplegar() : comprimir(true)));
+  document.getElementById('capitulo-cerrar').addEventListener('click', () => comprimir(true));
+  document.getElementById('capitulo-volver').addEventListener('click', () => comprimir(true));
 
   // Si cambian la versión con las pestañas, el capítulo abierto también cambia
   document.addEventListener('ri:version', e => {

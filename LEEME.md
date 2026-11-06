@@ -64,7 +64,7 @@ La versión elegida queda guardada en el navegador de cada persona.
 
 ## Piano de fondo
 
-- Suena **«Conéctate» de Benjamín O’Kington** (`audio/conectate-benjamin-okington.mp3`, 10 min, se repite en bucle).
+- Suena **«Conéctate» de Benjamín O’Kington** (`audio/conectate-benjamin-okington-2.mp3`, 10 min, recortada para que empiece en la primera nota y se repita en bucle sin silencios).
 - Para cambiar la pista: sube otro mp3 a `audio/` y en `index.html` cambia `data-src` y `data-artista` del reproductor:
   `<div class="piano" id="piano" data-src="audio/otra-pista.mp3" data-artista="Nombre del autor">`
 - Si dejas `data-src=""`, suena un piano generado en vivo (sin archivo).

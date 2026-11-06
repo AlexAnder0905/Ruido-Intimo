@@ -7,7 +7,8 @@
    y no se repite igual dos veces.
 
    ► Pista actual: «Conéctate» de Benjamín O’Kington
-     (audio/conectate-benjamin-okington.mp3), definida en el
+     (audio/conectate-benjamin-okington-2.mp3, recortada
+     para que empiece justo en la primera nota), definida en el
      atributo data-src del reproductor en index.html.
      Para cambiarla, sube otro mp3 a /audio y cambia data-src
      y data-artista. Si data-src queda vacío, suena el piano
@@ -67,6 +68,26 @@
     audio.loop = true;
     audio.preload = 'none';
     audio.setAttribute('playsinline', '');
+
+    /* La pista está recortada para que el piano suene desde el primer
+       segundo. Además, cuando el reproductor se acerca a la pantalla,
+       se empieza a descargar en silencio: así, al tocar «play», suena
+       al instante y no hay que esperar a que cargue. */
+    const precargar = () => {
+      if (audio.preload === 'auto') return;
+      audio.preload = 'auto';
+      try { audio.load(); } catch (e) {}
+    };
+    if ('IntersectionObserver' in window) {
+      const vigia = new IntersectionObserver(entradas => {
+        if (entradas.some(en => en.isIntersecting)) { precargar(); vigia.disconnect(); }
+      }, { rootMargin: '600px 0px' });
+      vigia.observe(caja);
+    } else {
+      precargar();
+    }
+    btnPlay.addEventListener('pointerenter', precargar, { once: true });
+    btnPlay.addEventListener('touchstart', precargar, { once: true, passive: true });
   }
 
   /* El iPhone ignora audio.volume (siempre suena al 100 %).
