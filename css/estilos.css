@@ -1689,7 +1689,7 @@ a.video-card:hover .video-play { transform: scale(1.08); }
     font-size: .6875rem; font-weight: 600;
     color: var(--tinta-suave);
   }
-  .tab svg { width: 22px; height: 22px; }
+  .tab svg, .tab .tab-rosa { width: 22px; height: 22px; flex: none; }
   .tab[aria-current="page"] { color: var(--verde-texto); }
   .seleccion { bottom: calc(80px + env(safe-area-inset-bottom)); }
 }
@@ -1772,7 +1772,7 @@ h1, h2, h3, p, li, blockquote { overflow-wrap: break-word; }
   .qe-titulo { font-size: clamp(2.4rem, 1.6rem + 3vw, 3.6rem); }
   .tabbar { height: calc(54px + env(safe-area-inset-bottom)); }
   .tab { flex-direction: row; gap: 6px; }
-  .tab svg { width: 18px; height: 18px; }
+  .tab svg, .tab .tab-rosa { width: 18px; height: 18px; }
 }
 
 /* Pantallas muy pequeñas (320 px) */
@@ -1822,3 +1822,34 @@ h1, h2, h3, p, li, blockquote { overflow-wrap: break-word; }
 @media (max-width: 1024px) {
   .btn-comunidad { display: none; }
 }
+
+
+/* ------------------------------------------------------------
+   17. DEVOCIONALES ANTERIORES Y ROSA DEL MENÚ
+------------------------------------------------------------ */
+/* Ícono «Qué es»: la rosa del logotipo, en el color de la pestaña */
+.tab-rosa {
+  display: block; width: 22px; height: 22px;
+  background: currentColor;
+  -webkit-mask: var(--rosa) center / contain no-repeat;
+          mask: var(--rosa) center / contain no-repeat;
+}
+
+/* Aviso en la página de un devocional anterior */
+.aviso-anterior {
+  display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  width: max-content; max-width: 100%;
+  margin-bottom: 18px; padding: 8px 14px;
+  border: 1px solid var(--linea); border-radius: 999px;
+  background: var(--papel); color: var(--tinta-suave);
+  font-size: .8125rem; text-decoration: none;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.aviso-anterior strong { color: var(--verde-texto); font-weight: 700; }
+.aviso-anterior svg { width: 16px; height: 16px; color: var(--verde-texto); fill: none; stroke: currentColor; stroke-width: 2; transition: transform .2s ease; }
+.aviso-anterior:hover, .aviso-anterior:focus-visible { border-color: var(--verde); background: var(--verde-luz); }
+.aviso-anterior:hover svg { transform: translateX(2px); }
+
+/* Testimonio recién publicado */
+.com-nuevo { animation: aparecer .5s ease both; }
+.com-nuevo .com-avatar { background: var(--verde); color: var(--papel); }

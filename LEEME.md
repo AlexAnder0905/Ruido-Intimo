@@ -144,6 +144,21 @@ Abre `js/archivo.js` y copia un bloque `{ ... }` al inicio de la lista `DEVOCION
 }
 ```
 
+### Devocionales anteriores que se pueden leer en el sitio
+
+Cada devocional anterior con texto tiene su propia página (por ahora `semana-07.html`, Santiago 1:12).
+Tiene lo mismo que «Hoy»: pasaje en 4 versiones, capítulo completo, piano, concordancias y su propio muro de testimonios.
+
+Cuando publiques un devocional nuevo en `index.html`, **antes** guarda el actual como página:
+
+1. Copia `index.html` y llámala `semana-08.html` (el número de ese devocional).
+2. En la copia, cambia «Versículo del día» por «Versículo de la semana» y agrega arriba el aviso
+   `<a href="index.html" class="aviso-anterior">…</a>` (cópialo de `semana-07.html`).
+3. Cambia la imagen principal por una propia (ej. `img/semana-08-versiculo.webp`), así no cambia cuando actualices la de hoy.
+4. En `js/archivo.js`, en el bloque de esa semana, pon `leer: 'semana-08.html'`.
+
+El muro de testimonios no se pierde: cada página usa su propio `data-devocional`, así que los comentarios de esa semana siguen ahí.
+
 Videos: en `VIDEOS`, pega el ID de YouTube (lo que va después de `v=` en el link). Si `id` está vacío, la tarjeta aparece como "Próximamente".
 
 ## Subirlo a internet (gratis)

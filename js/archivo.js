@@ -41,6 +41,7 @@ const DEVOCIONALES = [
     resumen: 'La victoria no consiste solo en salir de la prueba, sino en permanecer en Cristo durante ella.',
     temas: ['Pruebas', 'Perseverancia'],
     pdf: 'pdf/semana-07-permanecer-en-la-prueba.pdf',
+    leer: 'semana-07.html',
     portada: 'img/portadas/semana-07.webp',
     color: 'hondo'
   },

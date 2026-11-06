@@ -18,7 +18,11 @@ const CONFIG_COMENTARIOS = {
   // solo permite enviar testimonios pendientes y leer los aprobados.
   supabaseClave: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqZXlxamVucnBxbHJnaGVqbXZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM5MTk2NjAsImV4cCI6MjEwOTQ5NTY2MH0.1RsYI0_foV1bhgwnRJZin7BIYL0qesn8zJKfbWRMHS0',
   tabla: 'comentarios',
-  moderacion: true        // true = se publican cuando los apruebas en Supabase
+  // false = cada testimonio se publica al instante y queda guardado.
+  //         Para ocultar uno: en Supabase, tabla «comentarios», cambia
+  //         «aprobado» a false. Para borrarlo: elimina la fila.
+  // true  = se guardan ocultos hasta que tú los apruebes.
+  moderacion: true
 };
 
 
@@ -64,7 +68,12 @@ const CONFIG_COMENTARIOS = {
         },
         body: JSON.stringify({ devocional, nombre: c.nombre, texto: c.texto })
       });
-      if (!r.ok) throw new Error('guardar');
+      if (!r.ok) {
+        // Los avisos de la base de datos (ráfagas, repetidos, enlaces) se muestran tal cual
+        let detalle = '';
+        try { const j = await r.json(); if (j && j.code === 'P0001') detalle = j.message; } catch (e) {}
+        const err = new Error('guardar'); err.detalle = detalle; throw err;
+      }
     }
   } : {
     async listar() {
@@ -136,6 +145,15 @@ const CONFIG_COMENTARIOS = {
     total.textContent = comentarios.length ? `${comentarios.length}` : '';
   }
 
+  // Muestra el testimonio recién enviado de inmediato, sin esperar a recargar
+  function agregarArriba(c) {
+    const li = itemComentario(c);
+    li.classList.add('com-nuevo');
+    lista.prepend(li);
+    vacio.hidden = true;
+    total.textContent = String(lista.children.length);
+  }
+
   async function cargar() {
     try { pintar(await api.listar()); }
     catch (e) { vacio.textContent = 'No pudimos cargar los comentarios. Intenta más tarde.'; }
@@ -177,11 +195,12 @@ const CONFIG_COMENTARIOS = {
       if (conectado && moderacion) {
         avisar('Gracias por compartir. Tu testimonio aparecerá aquí cuando sea revisado.', 'ok');
       } else {
-        avisar('Gracias por compartir lo que Dios te habló.', 'ok');
-        await cargar();
+        avisar('Gracias por compartir lo que Dios te habló. Ya está publicado.', 'ok');
+        agregarArriba(comentario);
+        if (conectado) setTimeout(cargar, 1500);   // trae también los de otras personas
       }
     } catch (err) {
-      avisar('No se pudo enviar. Revisa tu conexión e inténtalo otra vez.', 'error');
+      avisar(err.detalle || 'No se pudo enviar. Revisa tu conexión e inténtalo otra vez.', 'error');
     } finally {
       btnEnviar.disabled = false;
       btnEnviar.textContent = 'Quiero compartir esto';
