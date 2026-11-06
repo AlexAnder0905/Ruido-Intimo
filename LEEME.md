@@ -1,5 +1,9 @@
 # Ruido Íntimo — sitio web
 
+**Sitio publicado:** https://ruido-intimo.vercel.app
+**Código:** https://github.com/AlexAnder0905/Ruido-Intimo (cada cambio en `main` se publica solo en Vercel)
+**Testimonios:** proyecto Supabase «Ruido Íntimo» (ya conectado en `js/comentarios.js`)
+
 Sitio estático (HTML + CSS + JavaScript, sin librerías ni instalación). Funciona en cualquier hosting.
 
 ## Estructura
