@@ -15,14 +15,16 @@ const CONFIG_COMENTARIOS = {
   // Proyecto Supabase "Ruido Íntimo" (conectado el 5 de noviembre de 2026)
   supabaseUrl: 'https://hjeyqjenrpqlrghejmvo.supabase.co',
   // Clave pública "anon": es segura en el navegador, porque la base de datos
-  // solo permite enviar testimonios pendientes y leer los aprobados.
+  // solo permite publicar testimonios y leer los visibles; nadie puede
+  // editarlos ni borrarlos desde el sitio.
   supabaseClave: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqZXlxamVucnBxbHJnaGVqbXZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM5MTk2NjAsImV4cCI6MjEwOTQ5NTY2MH0.1RsYI0_foV1bhgwnRJZin7BIYL0qesn8zJKfbWRMHS0',
   tabla: 'comentarios',
   // false = cada testimonio se publica al instante y queda guardado.
   //         Para ocultar uno: en Supabase, tabla «comentarios», cambia
   //         «aprobado» a false. Para borrarlo: elimina la fila.
   // true  = se guardan ocultos hasta que tú los apruebes.
-  moderacion: true
+  // (Si lo vuelves a true, cambia también la regla en Supabase; ver LEEME.md.)
+  moderacion: false
 };
 
 

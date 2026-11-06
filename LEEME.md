@@ -94,36 +94,31 @@ del lector y de las concordancias están sincronizadas: elegir una cambia todo.
 
 ## Comentarios: "¿Qué te habló Dios hoy?"
 
-Sin configurar, funciona en **modo demostración**: cada persona ve solo lo que escribió (se guarda en su navegador) y aparece un aviso.
-Para que todos vean los testimonios, conecta **Supabase** (gratis):
+Conectado a Supabase (proyecto **Ruido Íntimo**). Cada testimonio **se publica al instante** y queda guardado.
 
-1. Crea una cuenta en supabase.com → **New project**.
-2. Ve a **SQL Editor** y ejecuta:
+**Ver todos los comentarios:** supabase.com → proyecto Ruido Íntimo → **Table Editor → comentarios**.
+La columna `devocional` indica de qué página es cada uno (`jeremias-29-7`, `santiago-1-12`…).
+
+**Ocultar uno:** cambia `aprobado` a `false` (deja de verse en el sitio, pero queda guardado).
+**Borrarlo:** elimina la fila.
+
+Protecciones de la base de datos (no se pueden saltar desde el navegador):
+- Desde el sitio solo se puede publicar y leer: nadie puede editar ni borrar testimonios.
+- Frena ráfagas: máximo 30 testimonios en 10 minutos entre todos.
+- No acepta el mismo texto repetido en el mismo devocional durante 24 horas.
+- No acepta enlaces (`http://`, `www.`), que es lo típico del spam.
+- Limpia espacios del nombre; sin nombre queda «Anónimo». Texto entre 3 y 600 caracteres.
+
+**Volver a la revisión previa** (que nada se vea hasta aprobarlo): en el **SQL Editor** ejecuta
 
 ```sql
-create table comentarios (
-  id bigint generated always as identity primary key,
-  devocional text not null,
-  nombre text not null default 'Anónimo' check (char_length(nombre) <= 40),
-  texto text not null check (char_length(texto) between 3 and 600),
-  aprobado boolean not null default false,
-  creado timestamptz not null default now()
-);
-alter table comentarios enable row level security;
-
--- Cualquiera puede enviar, pero queda pendiente de aprobación
-create policy "enviar" on comentarios for insert to anon
+alter table comentarios alter column aprobado set default false;
+drop policy "visitantes publican testimonios" on comentarios;
+create policy "visitantes envian pendientes" on comentarios for insert to anon
   with check (aprobado = false);
-
--- Solo se muestran los aprobados
-create policy "leer aprobados" on comentarios for select to anon
-  using (aprobado = true);
 ```
 
-3. En **Project Settings → API** copia la *Project URL* y la clave *anon public*.
-4. Pégalas en `js/comentarios.js` (`supabaseUrl` y `supabaseClave`).
-5. **Moderar**: en **Table Editor → comentarios**, marca `aprobado = true` en los que quieras publicar.
-   Si prefieres publicar sin revisión, cambia `default false` por `default true` en el SQL, quita `with check (aprobado = false)` y pon `moderacion: false` en `js/comentarios.js` (no recomendado: spam y mensajes sensibles).
+y pon `moderacion: true` en `js/comentarios.js`.
 
 Cada devocional tiene su propio muro según `data-devocional` en el formulario (ej. `santiago-1-12`). Cámbialo al publicar uno nuevo.
 
