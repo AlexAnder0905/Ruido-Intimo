@@ -25,7 +25,7 @@ const DEVOCIONALES = [
   {
     numero: '08',
     titulo: '¿Qué estoy haciendo mientras camino y espero?',
-    cita: 'Mateo 28:19',
+    cita: 'Jeremías 29:7',
     fecha: '2026-11-03',
     resumen: 'Dios nos ha llamado a transformar nuestro entorno, no a ser transformados por quienes viven en nuestro entorno.',
     temas: ['Discipulado', 'Comunidad'],
