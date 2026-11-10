@@ -122,22 +122,30 @@ y pon `moderacion: true` en `js/comentarios.js`.
 
 Cada devocional tiene su propio muro según `data-devocional` en el formulario (ej. `santiago-1-12`). Cámbialo al publicar uno nuevo.
 
-## Agregar al Archivo
+## Agregar un devocional (página «Devocionales»)
 
-Abre `js/archivo.js` y copia un bloque `{ ... }` al inicio de la lista `DEVOCIONALES`:
+La lista está en **un solo archivo**: `js/devocionales.js`. La usan la página «Devocionales» (`archivo.html`),
+la sección «Más escritos» al final de cada devocional y el aviso del próximo devocional en «Hoy».
+
+Copia un bloque `{ ... }` al inicio de la lista `DEVOCIONALES`:
 
 ```js
 {
-  numero: '07',
+  numero: '09',
   titulo: 'Título del devocional',
   cita: 'Salmo 23:1',
-  fecha: '2026-11-05',
+  fecha: '2026-11-10',
   resumen: 'Una frase breve.',
   temas: ['Descanso'],
-  pdf: 'pdf/semana-07-titulo.pdf',
-  color: 'verde'          // verde | tinta | crema | hondo
+  pdf: 'pdf/semana-09-titulo.pdf',
+  leer: 'index.html#devocional',   // página donde se lee
+  color: 'verde'                    // verde | tinta | crema | hondo
 }
 ```
+
+- **Próximo devocional:** se calcula solo para el martes siguiente (`DIA_PUBLICACION = 2`).
+  Si ya sabes el título o la cita, escríbelos en `PROXIMO`.
+- En `index.html`, la sección «Más escritos» tiene `data-actual="08"`: cámbialo por el número del devocional de esa página.
 
 ### Devocionales anteriores que se pueden leer en el sitio
 
@@ -154,7 +162,7 @@ Cuando publiques un devocional nuevo en `index.html`, **antes** guarda el actual
 
 El muro de testimonios no se pierde: cada página usa su propio `data-devocional`, así que los comentarios de esa semana siguen ahí.
 
-Videos: en `VIDEOS`, pega el ID de YouTube (lo que va después de `v=` en el link). Si `id` está vacío, la tarjeta aparece como "Próximamente".
+Videos: en `js/archivo.js`, lista `VIDEOS`, pega el ID de YouTube (lo que va después de `v=` en el link). Si `id` está vacío, la tarjeta aparece como "Próximamente".
 
 ## Subirlo a internet (gratis)
 

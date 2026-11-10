@@ -27,6 +27,20 @@
   const artista  = (caja.dataset.artista || '').trim();
   const estadoReposo = artista || 'Instrumental suave · sin anuncios';
 
+  /* Botón flotante: se crea aquí para que actualizarUI() pueda usarlo */
+  const fab = document.createElement('button');
+  fab.type = 'button';
+  fab.className = 'piano-fab';
+  fab.setAttribute('aria-pressed', 'false');
+  fab.innerHTML =
+    '<span class="piano-fab-ico" aria-hidden="true">' +
+      '<svg class="ico-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg>' +
+      '<svg class="ico-pausa" viewBox="0 0 24 24"><path d="M7 4h3.5v16H7zM13.5 4H17v16h-3.5z"/></svg>' +
+    '</span>' +
+    '<span class="piano-fab-texto">Escuchar piano</span>' +
+    '<span class="piano-ondas" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>';
+  const fabTexto = fab.querySelector('.piano-fab-texto');
+
   let sonando = false;
   let silencio = false;
   let volumen = 40;
@@ -258,10 +272,15 @@
   async function reproducir() {
     if (audio) {
       estadoEl.textContent = 'Cargando…';
+      fab.classList.add('cargando'); fabTexto.textContent = 'Cargando…';
       conectarPista();
       if (ctxPista && ctxPista.state === 'suspended') { try { await ctxPista.resume(); } catch (e) {} }
       sesionDeMedios();
-      try { await audio.play(); } catch (e) { estadoEl.textContent = 'No se pudo cargar la pista'; return; }
+      try { await audio.play(); } catch (e) {
+        fab.classList.remove('cargando'); fabTexto.textContent = 'Escuchar piano';
+        estadoEl.textContent = 'No se pudo cargar la pista'; return;
+      }
+      fab.classList.remove('cargando');
     } else {
       if (!ctx && !iniciarMotor()) { estadoEl.textContent = 'Tu navegador no permite audio'; return; }
       await ctx.resume();
@@ -292,6 +311,10 @@
     caja.classList.toggle('sonando', sonando);
     btnPlay.setAttribute('aria-pressed', sonando);
     btnPlay.setAttribute('aria-label', sonando ? 'Pausar piano de fondo' : 'Reproducir piano de fondo');
+    fab.classList.toggle('sonando', sonando);
+    fab.setAttribute('aria-pressed', sonando);
+    fab.setAttribute('aria-label', sonando ? 'Pausar piano de fondo' : 'Reproducir piano de fondo');
+    fabTexto.textContent = sonando ? 'Pausar piano' : 'Escuchar piano';
     estadoEl.textContent = sonando ? (artista ? `Sonando · ${artista}` : 'Sonando · acompaña tu lectura') : estadoReposo;
     document.documentElement.classList.toggle('piano-activo', sonando);
     if ('mediaSession' in navigator) { try { navigator.mediaSession.playbackState = sonando ? 'playing' : 'paused'; } catch (e) {} }
@@ -305,19 +328,13 @@
   });
 
 
-  /* ---------- Mini reproductor flotante ----------
-     Cuando el piano suena y el reproductor sale de pantalla,
-     aparece un botón pequeño para pausar sin volver arriba. */
-  const mini = document.createElement('button');
-  mini.type = 'button';
-  mini.className = 'piano-mini';
-  mini.innerHTML = '<span class="piano-ondas" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span> Pausar piano';
-  mini.addEventListener('click', pausar);
-  document.body.appendChild(mini);
-
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(([e]) => {
-      mini.classList.toggle('visible', !e.isIntersecting);
-    }).observe(caja);
+  /* ---------- Botón flotante del piano ----------
+     Siempre visible (celular, tablet y computador) para reproducir
+     o pausar desde cualquier parte de la lectura, sin volver arriba. */
+  fab.addEventListener('click', () => (sonando ? pausar() : reproducir()));
+  if (audio) {
+    fab.addEventListener('pointerenter', () => { if (audio.preload !== 'auto') { audio.preload = 'auto'; try { audio.load(); } catch (e) {} } }, { once: true });
   }
+  document.body.appendChild(fab);
+  actualizarUI();
 })();

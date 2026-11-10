@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Archivo · Devocionales y videos · Ruido Íntimo</title>
-  <meta name="description" content="Descarga los devocionales anteriores de Ruido Íntimo en PDF y mira los videos del canal.">
+  <title>Devocionales y videos · Ruido Íntimo</title>
+  <meta name="description" content="Lee los devocionales de Ruido Íntimo, descárgalos en PDF, conoce el próximo y mira los videos del canal.">
   <meta name="theme-color" content="#F8F8EA" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0E1310" media="(prefers-color-scheme: dark)">
 
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Archivo · Ruido Íntimo">
-  <meta property="og:description" content="Devocionales anteriores en PDF y videos.">
+  <meta property="og:title" content="Devocionales · Ruido Íntimo">
+  <meta property="og:description" content="Todos los devocionales, el próximo de cada martes y videos.">
   <meta property="og:image" content="https://ruido-intimo.vercel.app/img/og-ruido-intimo.jpg">
   <meta property="og:url" content="https://ruido-intimo.vercel.app/archivo.html">
   <meta name="twitter:card" content="summary_large_image">
@@ -46,7 +46,7 @@
 
       <nav class="nav" aria-label="Principal">
         <a href="index.html" class="nav-link">Hoy</a>
-        <a href="archivo.html" class="nav-link" aria-current="page">Archivo</a>
+        <a href="archivo.html" class="nav-link" aria-current="page">Devocionales</a>
         <a href="que-es.html" class="nav-link">¿Qué es Ruido Íntimo?</a>
       </nav>
 
@@ -79,9 +79,10 @@
     <section class="archivo-hero">
       <div class="contenedor archivo-hero-grid">
         <div>
-          <p class="eyebrow entrada" style="--d:0"><span class="punto" aria-hidden="true"></span> Archivo</p>
+          <p class="eyebrow entrada" style="--d:0"><span class="punto" aria-hidden="true"></span> Devocionales</p>
           <h1 class="archivo-titulo entrada" style="--d:1">Vuelve a lo que <em>Dios ya habló.</em></h1>
-          <p class="bajada entrada" style="--d:2" >Descarga los devocionales anteriores en PDF y mira los videos cuando necesites detenerte otra vez.</p>
+          <p class="bajada entrada" style="--d:2">Lee los devocionales anteriores, descárgalos en PDF y mira los videos cuando necesites detenerte otra vez.</p>
+          <a href="#devocionales" class="proximo-aviso entrada" style="--d:3" data-proximo hidden></a>
         </div>
         <div class="archivo-cifras entrada" style="--d:3">
           <p><span class="cifra-num" id="cifra-devocionales">0</span><span class="cifra-etq">devocionales</span></p>
@@ -99,7 +100,7 @@
         <label class="buscador">
           <span class="sr-only">Buscar devocional</span>
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-          <input type="search" id="buscar" placeholder="Buscar por título, versículo o tema" autocomplete="off">
+          <input type="search" id="buscar" placeholder="Buscar por título, cita o tema" autocomplete="off">
         </label>
         <div class="chips" id="chips" role="group" aria-label="Filtrar por tema">
           <!-- Se generan desde js/archivo.js -->
@@ -110,12 +111,12 @@
 
     <!-- ============================================================
          DEVOCIONALES ANTERIORES (PDF)
-         Las tarjetas se generan desde la lista en js/archivo.js
+         Las tarjetas se generan desde la lista en js/devocionales.js
     ============================================================ -->
     <section class="seccion" id="devocionales" aria-labelledby="titulo-devs" style="padding-top:48px">
       <div class="contenedor">
         <div class="subtitulo-bloque">
-          <h2 id="titulo-devs">Devocionales <em>en PDF</em></h2>
+          <h2 id="titulo-devs">Todos los <em>devocionales</em></h2>
           <p class="resultados" id="resultados" aria-live="polite"></p>
         </div>
 
@@ -125,7 +126,7 @@
 
         <div class="vacio" id="vacio">
           <strong>No encontramos ese devocional</strong>
-          Prueba con otra palabra o elige “Todos”.
+          Prueba con otra palabra o elige «Todos».
         </div>
       </div>
     </section>
@@ -187,10 +188,10 @@
         <img class="logo logo-color"  src="img/logo-color.png"  alt="" width="800" height="322" loading="lazy">
         <img class="logo logo-blanco" src="img/logo-blanco.png" alt="" width="800" height="322" loading="lazy">
       </a>
-      <p class="pie-lema">Un devocional nuevo cada semana.</p>
+      <p class="pie-lema">Un devocional nuevo cada martes.</p>
       <nav class="pie-nav" aria-label="Pie de página">
         <a href="index.html">Hoy</a>
-        <a href="archivo.html">Archivo</a>
+        <a href="archivo.html">Devocionales</a>
         <a href="archivo.html#videos">Videos</a>
         <a href="que-es.html">¿Qué es Ruido Íntimo?</a>
         <a href="que-es.html#comunidad">Comunidad</a>
@@ -210,8 +211,8 @@
       Hoy
     </a>
     <a href="archivo.html" class="tab" aria-current="page">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6l2 2h8v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/></svg>
-      Archivo
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5v14c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-14c-3-.5-6 0-8 1.5zM12 6v14"/></svg>
+      Devocionales
     </a>
     <a href="que-es.html#comunidad" class="tab">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M16 4.6a3.2 3.2 0 0 1 0 6.2M18 14.2A6 6 0 0 1 21 20"/></svg>
@@ -226,6 +227,7 @@
   <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
 
   <script src="js/app.js" defer></script>
+  <script src="js/devocionales.js" defer></script>
   <script src="js/archivo.js" defer></script>
 </body>
 </html>

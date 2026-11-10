@@ -54,7 +54,7 @@
 
       <nav class="nav" aria-label="Principal">
         <a href="index.html" class="nav-link">Hoy</a>
-        <a href="archivo.html" class="nav-link" aria-current="page">Archivo</a>
+        <a href="archivo.html" class="nav-link" aria-current="page">Devocionales</a>
         <a href="que-es.html" class="nav-link">¿Qué es Ruido Íntimo?</a>
       </nav>
 
@@ -384,7 +384,7 @@
 
           <h3>Bienaventurado, aun en medio de la prueba</h3>
 
-          <p>La palabra que usa Santiago, <em>makários</em>, es la misma de las bienaventuranzas de Jesús (Mateo 5). Describe a alguien favorecido delante de Dios, no necesariamente a alguien cómodo. Una dificultad no prueba que Dios te haya abandonado, y la prosperidad tampoco prueba que te aprueba.</p>
+          <p>La palabra que usa Santiago, <em>makários</em>, es la misma de las bienaventuranzas de Jesús (Mateo 5). Describe a alguien favorecido delante de Dios, no necesariamente a alguien cómodo. Una dificultad no prueba que Dios te haya abandonado, y la prosperidad tampoco demuestra que te apruebe.</p>
 
           <h3>Soportar no es solo aguantar</h3>
 
@@ -434,6 +434,31 @@
         </footer>
 
       </article>
+    </section>
+
+
+    <!-- ============================================================
+         MÁS ESCRITOS — próximo devocional (cada martes) y anteriores.
+         Las tarjetas salen de la lista en js/devocionales.js
+         data-actual: número del devocional de esta página
+    ============================================================ -->
+    <section class="seccion seccion-escritos" id="mas-escritos" aria-labelledby="titulo-escritos">
+      <div class="contenedor">
+        <header class="escritos-cabecera revelar">
+          <div class="seccion-cabecera">
+            <p class="eyebrow">Más escritos</p>
+            <h2 id="titulo-escritos" class="titulo-seccion">Sigue <em>leyendo</em></h2>
+            <p class="bajada">Publicamos un devocional nuevo cada martes. Mientras llega el próximo, vuelve a los que ya están escritos.</p>
+          </div>
+          <a href="archivo.html" class="btn btn-borde">
+            Ver todos los devocionales
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </header>
+        <div class="grilla grilla-escritos" id="escritos" data-actual="07">
+          <noscript><p><a href="archivo.html">Ver todos los devocionales</a></p></noscript>
+        </div>
+      </div>
     </section>
 
 
@@ -496,13 +521,13 @@
       <div class="contenedor cierre-grid revelar">
         <div>
           <p class="eyebrow eyebrow-claro">Sigue caminando</p>
-          <h2 id="titulo-cierre" class="cierre-titulo">Cada semana, <em>un nuevo encuentro.</em></h2>
+          <h2 id="titulo-cierre" class="cierre-titulo">Cada martes, <em>un nuevo encuentro.</em></h2>
         </div>
         <div class="cierre-acciones">
-          <p>El devocional de esta semana ya está publicado. Sigue leyendo o vuelve al archivo.</p>
+          <p>El devocional de esta semana ya está publicado. Léelo o vuelve a todos los devocionales.</p>
           <div class="acciones">
             <a href="index.html" class="btn btn-claro">Leer el devocional de hoy</a>
-            <a href="archivo.html" class="btn btn-borde-claro">Volver al archivo</a>
+            <a href="archivo.html" class="btn btn-borde-claro">Ver todos los devocionales</a>
           </div>
         </div>
       </div>
@@ -520,10 +545,10 @@
         <img class="logo logo-color"  src="img/logo-color.png"  alt="" width="800" height="322" loading="lazy">
         <img class="logo logo-blanco" src="img/logo-blanco.png" alt="" width="800" height="322" loading="lazy">
       </a>
-      <p class="pie-lema">Un devocional nuevo cada semana.</p>
+      <p class="pie-lema">Un devocional nuevo cada martes.</p>
       <nav class="pie-nav" aria-label="Pie de página">
         <a href="index.html">Hoy</a>
-        <a href="archivo.html">Archivo</a>
+        <a href="archivo.html">Devocionales</a>
         <a href="archivo.html#videos">Videos</a>
         <a href="que-es.html">¿Qué es Ruido Íntimo?</a>
         <a href="que-es.html#comunidad">Comunidad</a>
@@ -544,8 +569,8 @@
       Hoy
     </a>
     <a href="archivo.html" class="tab" aria-current="page">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6l2 2h8v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/></svg>
-      Archivo
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5v14c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-14c-3-.5-6 0-8 1.5zM12 6v14"/></svg>
+      Devocionales
     </a>
     <a href="que-es.html#comunidad" class="tab">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M16 4.6a3.2 3.2 0 0 1 0 6.2M18 14.2A6 6 0 0 1 21 20"/></svg>
@@ -569,6 +594,7 @@
   <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
 
   <script src="js/app.js" defer></script>
+  <script src="js/devocionales.js" defer></script>
   <script src="js/piano.js" defer></script>
   <script src="js/capitulo.js" defer></script>
   <script src="js/comentarios.js" defer></script>
