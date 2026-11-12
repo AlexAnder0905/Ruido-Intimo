@@ -27,6 +27,7 @@
   const credito  = document.getElementById('capitulo-credito');
   const chip     = document.getElementById('capitulo-chip');
   const accion   = btn.querySelector('.capitulo-accion');
+  const externo  = document.getElementById('capitulo-externo');   // enlace a BibleGateway
 
   const libro   = btn.dataset.libro;
   const libroId = btn.dataset.libroId;
@@ -123,6 +124,8 @@
   async function cargar(v) {
     const info = VERSIONES[v] || VERSIONES.RVR1960;
     const miPedido = ++pedido;
+    // El enlace externo abre el capítulo en la misma versión elegida (BibleGateway sí tiene la NBLA)
+    if (externo) { externo.href = enlaceExterno(VERSIONES[v] ? v : 'RVR1960'); externo.setAttribute('aria-label', `Abrir ${libro} ${cap} en BibleGateway (${VERSIONES[v] ? v : 'RVR1960'})`); }
     chip.textContent = info.etiqueta;
     credito.textContent = info.credito;
     aviso.hidden = !info.aviso;

@@ -9,10 +9,10 @@
      1. Sube el PDF a la carpeta /pdf
      2. Copia un bloque { ... } de DEVOCIONALES, pégalo ARRIBA
         de la lista y cambia sus datos.
-     El aviso «Próximamente» avanza solo al martes siguiente.
+     El aviso «Próximamente» avanza solo al miércoles siguiente.
 
    ► DÍA DE PUBLICACIÓN
-     Un devocional nuevo cada martes (DIA_PUBLICACION = 2).
+     Un devocional nuevo cada miércoles (DIA_PUBLICACION = 3).
      Domingo 0 · lunes 1 · martes 2 · miércoles 3 · jueves 4 ·
      viernes 5 · sábado 6.
 
@@ -21,7 +21,7 @@
      en PROXIMO. Si los dejas vacíos, se muestra un texto general.
    ============================================================ */
 
-const DIA_PUBLICACION = 2;   // martes
+const DIA_PUBLICACION = 3;   // miércoles
 
 const PROXIMO = {
   titulo: '',   // ej.: 'Raíces profundas'
@@ -37,7 +37,7 @@ const DEVOCIONALES = [
     numero: '09',
     titulo: 'El pueblo firmó, celebró y cantó, y luego no obedeció',
     cita: 'Nehemías 13',
-    fecha: '2026-11-10',
+    fecha: '2026-11-11',
     resumen: 'La obediencia no se mide por la intensidad del momento de compromiso, sino por la fidelidad cuando nadie te está mirando.',
     temas: ['Obediencia', 'Fidelidad'],
     pdf: '',
@@ -54,7 +54,8 @@ const DEVOCIONALES = [
     temas: ['Discipulado', 'Comunidad'],
     pdf: 'pdf/semana-08-mientras-camino-y-espero.pdf',
     leer: 'semana-08.html',
-    color: 'tinta'
+    portada: 'img/portadas/semana-08.webp',
+    color: 'hondo'
   },
   {
     numero: '07',

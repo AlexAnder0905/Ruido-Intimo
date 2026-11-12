@@ -1992,3 +1992,12 @@ h1, h2, h3, p, li, blockquote { overflow-wrap: break-word; }
 
 /* La columna de texto del versículo nunca empuja el ancho de la página */
 .hoy-texto { min-width: 0; }
+
+/* Enlace para abrir el capítulo en BibleGateway */
+.capitulo-externo {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: .875rem; font-weight: 600; color: var(--verde-texto);
+  text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px;
+}
+.capitulo-externo svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; }
+.capitulo-externo:hover { text-decoration-thickness: 2px; }

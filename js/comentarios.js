@@ -195,14 +195,16 @@ const CONFIG_COMENTARIOS = {
       form.reset();
       contador.textContent = '0 / 600';
       if (conectado && moderacion) {
-        avisar('Gracias por compartir. Tu testimonio aparecerá aquí cuando sea revisado.', 'ok');
+        avisar('Gracias por compartir. Tu comentario aparecerá aquí cuando sea revisado.', 'ok');
       } else {
         avisar('Gracias por compartir lo que Dios te habló. Ya está publicado.', 'ok');
         agregarArriba(comentario);
         if (conectado) setTimeout(cargar, 1500);   // trae también los de otras personas
       }
     } catch (err) {
-      avisar(err.detalle || 'No se pudo enviar. Revisa tu conexión e inténtalo otra vez.', 'error');
+      // Los avisos de la base hablan de «testimonios»; en el sitio se dice «comentarios»
+      const detalle = (err.detalle || '').replace(/testimonios/g, 'comentarios').replace(/testimonio/g, 'comentario');
+      avisar(detalle || 'No se pudo enviar. Revisa tu conexión e inténtalo otra vez.', 'error');
     } finally {
       btnEnviar.disabled = false;
       btnEnviar.textContent = 'Quiero compartir esto';
