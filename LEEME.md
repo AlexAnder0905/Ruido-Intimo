@@ -71,15 +71,23 @@ La versión elegida queda guardada en el navegador de cada persona.
 - El audio solo se descarga cuando alguien aprieta reproducir, así que no hace más lenta la página.
 - El volumen y el silencio se recuerdan. Si la persona baja leyendo, aparece un botón flotante para pausar.
 
-## Leer el capítulo completo (dentro del sitio)
+## Leer el capítulo completo (en la misma caja de lectura)
 
-El botón «Leer Santiago 1 completo» despliega el capítulo bajo el pasaje, en la versión elegida.
-El texto **no está copiado en el sitio**: se carga en vivo desde **bolls.life**, un servicio bíblico gratuito.
+Bajo el pasaje hay **un solo botón**: «Leer [libro] [capítulo] completo». Al tocarlo, el resto del capítulo aparece
+antes y después del pasaje, en el mismo texto y en la versión elegida; el pasaje del devocional queda marcado.
+El botón cambia a «Volver al pasaje» y se mantiene a mano mientras se lee.
 
-- RVR1960, NTV y PDT se muestran tal cual. La **NBLA no está en ese servicio**: se muestra la **LBLA** (versión anterior de la misma editorial) con un aviso.
-- Si el servicio no responde, aparece «Reintentar» y un enlace a BibleGateway como respaldo.
-- Para otro capítulo, cambia en el botón `#capitulo-btn` de `index.html`: `data-libro`, `data-libro-id` (Santiago = 59; lista en `js/capitulo.js`), `data-cap` y `data-destacar`.
-- bolls.life es un proyecto independiente y gratuito, sin garantía de funcionamiento ni de licencias. Si el sitio crece, conviene pasar a un servicio oficial con licencia (por ejemplo YouVersion Platform o API.Bible); solo hay que cambiar la función `SERVICIO` en `js/capitulo.js`.
+Para cada devocional, en el HTML, el bloque `#capitulo` (dentro de la caja de lectura) lleva:
+
+```html
+<div class="lector-capitulo" id="capitulo" data-libro="Nehemías" data-libro-id="16" data-cap="13" data-destacar="10-13" data-total="31">
+```
+
+- `data-libro-id`: número del libro (Génesis = 1 … Nehemías = 16, Jeremías = 24, Mateo = 40, Santiago = 59, Apocalipsis = 66).
+- El texto se carga en línea (función `/api/capitulo` de Vercel). La NBLA completa no está disponible: el contexto se muestra en LBLA y se avisa.
+- **Para que una versión se abra sin internet**, pega el capítulo dentro del bloque:
+  `<script type="application/json" id="capitulo-local">{"PDT":[{"verse":1,"text":"…"}]}</script>` (así está Nehemías 13 en PDT).
+- Si no carga, aparece «Reintentar · Abrir en BibleGateway» en la misma versión.
 
 ## Volumen del piano
 

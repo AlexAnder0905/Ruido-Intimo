@@ -2001,3 +2001,81 @@ h1, h2, h3, p, li, blockquote { overflow-wrap: break-word; }
 }
 .capitulo-externo svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; }
 .capitulo-externo:hover { text-decoration-thickness: 2px; }
+
+
+/* ------------------------------------------------------------
+   18. CAPÍTULO COMPLETO DENTRO DE LA CAJA DE LECTURA
+   Un solo botón. El contexto aparece antes y después del pasaje,
+   y el pasaje del devocional queda marcado.
+------------------------------------------------------------ */
+.lector { overflow: hidden; overflow: clip; }   /* clip permite que el botón quede fijo al bajar */
+
+.lector-texto .cap-contexto { color: color-mix(in srgb, var(--tinta) 82%, transparent); animation: aparecer .45s ease both; }
+.lector-texto .cap-contexto + p,
+.lector-texto p + .cap-contexto { margin-top: 1.1em; }
+
+/* El pasaje del devocional, marcado cuando se lee el capítulo entero */
+.lector.expandido .lector-texto > p:not(.cap-contexto) {
+  position: relative;
+  margin-inline: calc(-1 * clamp(12px, 2.4vw, 24px));
+  padding: 1.6em clamp(12px, 2.4vw, 24px) .9em;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--verde-luz) 70%, transparent);
+  box-shadow: inset 3px 0 0 var(--verde);
+}
+.lector.expandido .lector-texto > p:not(.cap-contexto)::before {
+  content: 'Pasaje del devocional';
+  position: absolute; top: .55em; left: clamp(12px, 2.4vw, 24px);
+  font-family: var(--sans); font-size: .6875rem; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--verde-texto);
+}
+
+/* Zona del botón */
+.lector-capitulo {
+  display: grid; gap: 10px; justify-items: start;
+  padding: 0 clamp(20px, 5vw, 56px) clamp(20px, 3vw, 28px);
+}
+.lector.expandido .lector-capitulo {
+  position: sticky; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 4;
+  padding-top: 18px;
+  background: linear-gradient(to bottom, transparent, var(--papel) 40%);
+}
+.cap-btn {
+  display: inline-flex; align-items: center; gap: 10px; flex-wrap: nowrap;
+  max-width: 100%; min-height: 46px; white-space: nowrap;
+  padding: 10px 18px;
+  border: 1px solid color-mix(in srgb, var(--verde) 45%, transparent);
+  border-radius: 999px;
+  background: var(--papel); color: var(--verde-texto);
+  font-family: var(--sans); font-size: .9375rem; font-weight: 700; line-height: 1.2; text-align: left;
+  cursor: pointer;
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+}
+.cap-btn:hover, .cap-btn:focus-visible { background: var(--verde-luz); border-color: var(--verde); }
+.cap-btn-meta { font-weight: 500; font-size: .8125rem; color: var(--tinta-suave); }
+.cap-btn-flecha { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; transition: transform .25s ease; }
+.cap-btn[aria-expanded="true"] { background: var(--verde); border-color: var(--verde); color: #F8F8EA; box-shadow: 0 10px 24px -14px rgba(0,0,0,.45); }
+.cap-btn[aria-expanded="true"] .cap-btn-flecha { transform: rotate(180deg); }
+.cap-btn.cargando { opacity: .75; cursor: progress; }
+.cap-btn:disabled { cursor: progress; }
+
+.cap-estado { font-family: var(--sans); font-size: .8125rem; line-height: 1.5; color: var(--tinta-suave); max-width: 60ch; }
+.cap-enlace {
+  font: inherit; font-weight: 700; color: var(--verde-texto); background: none; border: 0; padding: 0;
+  text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  /* El botón fijo deja libre la barra inferior y el botón del piano */
+  .lector.expandido .lector-capitulo { bottom: calc(76px + env(safe-area-inset-bottom)); padding-right: 84px; }
+}
+@media (max-width: 480px) {
+  .cap-btn-meta { display: none; }   /* en celular, solo la acción */
+}
+@media (max-width: 420px) {
+  .cap-btn { font-size: .875rem; padding: 10px 16px; gap: 8px; }
+  .lector.expandido .lector-texto > p:not(.cap-contexto) { margin-inline: -8px; padding-inline: 8px; }
+  .lector.expandido .lector-texto > p:not(.cap-contexto)::before { left: 8px; }
+}
+/* Mientras se marcan versículos, el botón vuelve a su lugar para no tapar la barra */
+body:has(.seleccion:not([hidden])) .lector.expandido .lector-capitulo { position: static; background: none; }

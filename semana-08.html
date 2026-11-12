@@ -223,50 +223,20 @@
               </div>
             </div>
 
+            <!-- Capítulo completo: se despliega aquí mismo, antes y después del pasaje (js/capitulo.js) -->
+            <div class="lector-capitulo" id="capitulo" data-libro="Jeremías" data-libro-id="24" data-cap="29" data-destacar="4-7" data-total="32">
+              <p class="cap-estado" id="capitulo-estado" role="status" aria-live="polite" hidden></p>
+              <button type="button" class="cap-btn" id="capitulo-btn" aria-expanded="false" aria-controls="lector">
+                <span class="cap-btn-texto">Leer Jeremías 29 completo</span>
+                <span class="cap-btn-meta">32 versículos</span>
+                <svg class="cap-btn-flecha" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+            </div>
+
             <p class="lector-credito" id="lector-credito">
               Texto bíblico: Reina-Valera 1960 © Sociedades Bíblicas en América Latina, 1960. Renovado © Sociedades Bíblicas Unidas, 1988. Utilizado con permiso.
             </p>
           </article>
-
-          <!-- Leer el capítulo completo dentro del sitio (se despliega aquí mismo).
-               El texto se carga en vivo según la versión elegida: ver js/capitulo.js -->
-          <button type="button" class="capitulo revelar" id="capitulo-btn"
-                  aria-expanded="false" aria-controls="capitulo-panel"
-                  data-libro="Jeremías" data-libro-id="24" data-cap="29" data-destacar="4-7">
-            <span class="capitulo-icono" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><path d="M12 6c-2-1.5-5-2-8-1.5v14c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-14c-3-.5-6 0-8 1.5zM12 6v14"/></svg>
-            </span>
-            <span class="capitulo-texto">
-              <strong class="capitulo-accion">Leer Jeremías 29 completo</strong>
-              <span>32 versículos · versión <b data-version-nombre>RVR1960</b></span>
-            </span>
-            <svg class="capitulo-flecha" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
-
-          <section class="capitulo-panel" id="capitulo-panel" aria-labelledby="capitulo-titulo" hidden>
-            <header class="capitulo-cab">
-              <div>
-                <p class="eyebrow">Capítulo completo</p>
-                <h3 id="capitulo-titulo">Jeremías 29 <span class="chip" id="capitulo-chip">RVR1960</span></h3>
-              </div>
-              <button type="button" class="icono-btn" id="capitulo-cerrar" aria-label="Comprimir el capítulo">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>
-              </button>
-            </header>
-            <p class="capitulo-aviso" id="capitulo-aviso" hidden></p>
-            <div class="capitulo-lectura" id="capitulo-lectura" aria-live="polite" aria-busy="false"></div>
-            <footer class="capitulo-pie">
-              <p class="capitulo-credito" id="capitulo-credito"></p>
-              <a class="capitulo-externo" id="capitulo-externo" href="https://www.biblegateway.com/" target="_blank" rel="noopener">
-                Abrir en BibleGateway
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
-              </a>
-              <button type="button" class="btn btn-borde btn-sm" id="capitulo-volver">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>
-                Comprimir capítulo
-              </button>
-            </footer>
-          </section>
 
           <!-- Reproductor: piano de fondo para acompañar la lectura -->
           <div class="piano revelar" id="piano" data-src="audio/conectate-benjamin-okington-2.mp3" data-titulo="Conéctate" data-artista="Benjamín O’Kington">

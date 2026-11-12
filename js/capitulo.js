@@ -1,148 +1,100 @@
 /* ============================================================
    RUIDO ÍNTIMO — capitulo.js
-   "Leer el capítulo completo" dentro del sitio.
+   «Leer el capítulo completo» dentro de la misma caja de lectura.
 
-   El texto NO está copiado en el sitio: se carga en vivo desde
-   un servicio bíblico gratuito (bolls.life) en la versión que
-   la persona tenga elegida, y se despliega bajo el pasaje.
+   Un solo botón. Al tocarlo, el resto del capítulo aparece
+   antes y después del pasaje del devocional, en el mismo texto
+   y en la versión elegida. El pasaje queda marcado para no
+   perderlo. Al tocar «Volver al pasaje», todo regresa a como
+   estaba.
 
-   ► Para otro devocional, en index.html cambia los atributos
-     del botón #capitulo-btn:
-       data-libro="Santiago"   (nombre que se muestra)
-       data-libro-id="59"      (número del libro: Génesis = 1 …
+   ► Para cada devocional, en el HTML, el bloque #capitulo lleva:
+       data-libro="Nehemías"   (nombre que se muestra)
+       data-libro-id="16"      (número del libro: Génesis = 1 …
+                                Nehemías = 16, Jeremías = 24,
                                 Mateo = 40, Juan = 43, Romanos = 45,
-                                Hebreos = 58, Santiago = 59,
-                                Apocalipsis = 66)
-       data-cap="1"            (capítulo)
-       data-destacar="12-15"   (versículos del pasaje del día)
+                                Santiago = 59, Apocalipsis = 66)
+       data-cap="13"           (capítulo)
+       data-destacar="10-13"   (versículos del pasaje del día)
+       data-total="31"         (cantidad de versículos)
+
+   ► Texto incluido en la página (opcional, se abre sin internet):
+       <script type="application/json" id="capitulo-local">
+         {"PDT":[{"verse":1,"text":"…"}, …]}
+       </script>
+     Las versiones que no estén ahí se cargan en línea
+     (/api/capitulo en el sitio publicado, o bolls.life).
    ============================================================ */
 
 (function () {
-  const btn = document.getElementById('capitulo-btn');
-  const panel = document.getElementById('capitulo-panel');
-  if (!btn || !panel) return;
+  const caja   = document.getElementById('capitulo');
+  const btn    = document.getElementById('capitulo-btn');
+  const lector = document.getElementById('lector');
+  if (!caja || !btn || !lector) return;
 
-  const lectura  = document.getElementById('capitulo-lectura');
-  const aviso    = document.getElementById('capitulo-aviso');
-  const credito  = document.getElementById('capitulo-credito');
-  const chip     = document.getElementById('capitulo-chip');
-  const accion   = btn.querySelector('.capitulo-accion');
-  const externo  = document.getElementById('capitulo-externo');   // enlace a BibleGateway
+  const articulo = lector.closest('.lector');
+  const estado   = document.getElementById('capitulo-estado');
+  const credito  = document.getElementById('lector-credito');
+  const textoBtn = btn.querySelector('.cap-btn-texto');
+  const metaBtn  = btn.querySelector('.cap-btn-meta');
 
-  const libro   = btn.dataset.libro;
-  const libroId = btn.dataset.libroId;
-  const cap     = btn.dataset.cap;
-  const [desde, hasta] = (btn.dataset.destacar || '').split('-').map(Number);
+  const libro   = caja.dataset.libro;
+  const libroId = caja.dataset.libroId;
+  const cap     = caja.dataset.cap;
+  const total   = caja.dataset.total;
+  const [desde, hasta] = (caja.dataset.destacar || '').split('-').map(Number);
 
-  /* Servicio que entrega el texto (JSON: [{verse, text}, …]).
-     1.º se pide al propio sitio (/api/capitulo, función de Vercel que
-         trae el texto y lo guarda en caché): no depende de permisos
-         del servicio externo y es más rápido.
-     2.º si eso falla (o el sitio se abrió con doble clic), se pide
-         directo a bolls.life.
-     La NBLA no está disponible ahí: se muestra la LBLA, su versión
-     anterior de la misma editorial, y se avisa con claridad. */
+  const ETIQUETA_CERRADO = `Leer ${libro} ${cap} completo`;
+  const ETIQUETA_ABIERTO = 'Volver al pasaje';
+  const META_CERRADO = total ? `${total} versículos` : '';
+
+  /* Código de cada versión en el servicio en línea.
+     La NBLA completa no está disponible ahí: el contexto se
+     muestra en LBLA (misma editorial) y se avisa. */
+  const SERVICIO = {
+    RVR1960: { codigo: 'RV1960' },
+    NBLA:    { codigo: 'LBLA', nota: 'Los versículos fuera del pasaje se muestran en LBLA, la versión anterior de la NBLA, porque la NBLA completa no está disponible aquí.', credito: 'Contexto: La Biblia de las Américas (LBLA) © The Lockman Foundation.' },
+    NTV:     { codigo: 'NTV' },
+    PDT:     { codigo: 'PDT' }
+  };
   const enServidor = /^https?:$/.test(location.protocol);
-  const FUENTES = (codigo) => [
+  const fuentes = (codigo) => [
     ...(enServidor ? [`/api/capitulo?v=${codigo}&libro=${libroId}&cap=${cap}`] : []),
     `https://bolls.life/get-text/${codigo}/${libroId}/${cap}/`
   ];
-  const VERSIONES = {
-    RVR1960: { codigo: 'RV1960', etiqueta: 'RVR1960', credito: 'Reina-Valera 1960 © Sociedades Bíblicas en América Latina, 1960. Renovado © Sociedades Bíblicas Unidas, 1988.' },
-    NBLA:    { codigo: 'LBLA',   etiqueta: 'LBLA',    credito: 'La Biblia de las Américas (LBLA) © The Lockman Foundation.',
-               aviso: 'La NBLA no está disponible para leer el capítulo completo aquí. Te mostramos la LBLA, su versión anterior de la misma editorial.' },
-    NTV:     { codigo: 'NTV',    etiqueta: 'NTV',     credito: 'Nueva Traducción Viviente (NTV) © Tyndale House Foundation, 2010.' },
-    PDT:     { codigo: 'PDT',    etiqueta: 'PDT',     credito: 'Palabra de Dios para Todos (PDT) © Bible League International.' }
-  };
 
-  const cache = {};
-
-  /* Capítulo incluido en la página (opcional):
-     <script type="application/json" id="capitulo-local">{"PDT":[{"verse":1,"text":"…"}, …]}</script>
-     Si la versión elegida está ahí, se muestra al instante, sin internet. */
   const local = (() => {
     try { return JSON.parse(document.getElementById('capitulo-local')?.textContent || '{}'); }
     catch (e) { return {}; }
   })();
-  let version = document.querySelector('.version-tab[aria-selected="true"]')?.dataset.version || 'RVR1960';
+
+  const cache = {};
+  let abierto = false;
   let pedido = 0;
 
-  // Limpia el HTML que trae el servicio (números de Strong, notas) y deja solo el texto
-  function textoLimpio(html) {
-    const sinExtras = String(html || '')
-      .replace(/<S>.*?<\/S>/gi, '')
-      .replace(/<sup[^>]*>.*?<\/sup>/gi, '');
-    const doc = new DOMParser().parseFromString(sinExtras, 'text/html');
-    return (doc.body.textContent || '').replace(/\s+/g, ' ').trim();
-  }
+  const panelActivo = () => lector.querySelector('.lector-texto[data-version]:not([hidden])');
+  const versionActiva = () => panelActivo()?.dataset.version || 'RVR1960';
+  const sinMovimiento = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function enlaceExterno(v) {
     return `https://www.biblegateway.com/passage/?search=${encodeURIComponent(libro + ' ' + cap)}&version=${v}`;
   }
 
-  function cargando() {
-    lectura.setAttribute('aria-busy', 'true');
-    lectura.replaceChildren();
-    for (let i = 0; i < 6; i++) {
-      const linea = document.createElement('span');
-      linea.className = 'capitulo-cargando';
-      linea.style.width = (70 + Math.random() * 30) + '%';
-      lectura.appendChild(linea);
-    }
+  // Limpia lo que trae el servicio (números de Strong, notas, títulos) y deja solo el texto
+  function textoLimpio(html) {
+    const sinExtras = String(html || '')
+      .replace(/<S>.*?<\/S>/gi, '')
+      .replace(/<sup[^>]*>.*?<\/sup>/gi, '')
+      .replace(/<p[^>]*>.*?<\/p>/gi, '');
+    const doc = new DOMParser().parseFromString(sinExtras, 'text/html');
+    return (doc.body.textContent || '').replace(/\s+/g, ' ').replace(/^['"]+|['"]+$/g, '').trim();
   }
 
-  function pintar(versiculos) {
-    const p = document.createElement('p');
-    versiculos.forEach(v => {
-      const n = Number(v.verse);
-      const span = document.createElement('span');
-      span.className = 'cv' + (n >= desde && n <= hasta ? ' cv-dia' : '');
-      const sup = document.createElement('sup');
-      sup.textContent = n;
-      span.append(sup, textoLimpio(v.text) + ' ');
-      p.appendChild(span);
-    });
-    lectura.replaceChildren(p);
-    lectura.setAttribute('aria-busy', 'false');
-  }
-
-  function error() {
-    lectura.setAttribute('aria-busy', 'false');
-    const box = document.createElement('div');
-    box.className = 'capitulo-error';
-    const t = document.createElement('p');
-    t.textContent = 'No pudimos cargar el capítulo en este momento. Revisa tu conexión e inténtalo de nuevo.';
-    const fila = document.createElement('div');
-    fila.className = 'acciones';
-    const reintentar = document.createElement('button');
-    reintentar.type = 'button';
-    reintentar.className = 'btn btn-primario btn-sm';
-    reintentar.textContent = 'Reintentar';
-    reintentar.addEventListener('click', () => cargar(version));
-    const afuera = document.createElement('a');
-    afuera.className = 'btn btn-borde btn-sm';
-    afuera.href = enlaceExterno(version);
-    afuera.target = '_blank'; afuera.rel = 'noopener';
-    afuera.textContent = 'Leer en BibleGateway';
-    fila.append(reintentar, afuera);
-    box.append(t, fila);
-    lectura.replaceChildren(box);
-  }
-
-  async function cargar(v) {
-    const info = VERSIONES[v] || VERSIONES.RVR1960;
-    const miPedido = ++pedido;
-    // El enlace externo abre el capítulo en la misma versión elegida (BibleGateway sí tiene la NBLA)
-    if (externo) { externo.href = enlaceExterno(VERSIONES[v] ? v : 'RVR1960'); externo.setAttribute('aria-label', `Abrir ${libro} ${cap} en BibleGateway (${VERSIONES[v] ? v : 'RVR1960'})`); }
-    chip.textContent = info.etiqueta;
-    credito.textContent = info.credito;
-    aviso.hidden = !info.aviso;
-    aviso.textContent = info.aviso || '';
-
-    if (Array.isArray(local[v]) && local[v].length) { pintar(local[v]); return; }
-    if (cache[info.codigo]) { pintar(cache[info.codigo]); return; }
-    cargando();
-    for (const url of FUENTES(info.codigo)) {
+  async function versiculos(v) {
+    if (Array.isArray(local[v]) && local[v].length) return local[v];
+    const codigo = (SERVICIO[v] || SERVICIO.RVR1960).codigo;
+    if (cache[codigo]) return cache[codigo];
+    for (const url of fuentes(codigo)) {
       try {
         const control = new AbortController();
         const limite = setTimeout(() => control.abort(), 9000);
@@ -151,81 +103,137 @@
         if (!r.ok) throw new Error('respuesta ' + r.status);
         const datos = await r.json();
         if (!Array.isArray(datos) || !datos.length) throw new Error('vacío');
-        cache[info.codigo] = datos;
-        if (miPedido === pedido) pintar(datos);
-        return;
-      } catch (e) { /* se prueba la siguiente fuente */ }
+        cache[codigo] = datos;
+        return datos;
+      } catch (e) { /* siguiente fuente */ }
     }
-    if (miPedido === pedido) error();
+    throw new Error('sin fuentes');
   }
 
-  /* ---------- Desplegar y comprimir ----------
-     El capítulo se despliega justo bajo el botón, sin saltar a otra
-     parte de la página. Al comprimirlo, todo vuelve a su estado
-     original y, si la persona ya había bajado leyendo, la pantalla
-     regresa con suavidad al botón para no perder el lugar. */
-  const sinMovimiento = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let animacion = null;
+  // Un versículo de contexto se comporta igual que los del pasaje (se puede marcar y copiar)
+  function spanVersiculo(n, texto) {
+    const span = document.createElement('span');
+    span.className = 'v';
+    span.dataset.v = n;
+    span.tabIndex = 0;
+    span.setAttribute('role', 'button');
+    span.setAttribute('aria-pressed', 'false');
+    const sup = document.createElement('sup');
+    sup.textContent = n;
+    span.append(sup, texto);
+    return span;
+  }
 
-  function etiquetas(abierto) {
+  function parrafo(clase, lista) {
+    const p = document.createElement('p');
+    p.className = 'cap-contexto ' + clase;
+    lista.forEach((d, i) => {
+      if (i) p.append(' ');
+      p.append(spanVersiculo(Number(d.verse), textoLimpio(d.text)));
+    });
+    return p;
+  }
+
+  function quitarContexto() {
+    lector.querySelectorAll('.cap-contexto').forEach(p => p.remove());
+  }
+
+  function avisar(texto, conAcciones, v) {
+    if (!estado) return;
+    estado.replaceChildren();
+    if (!texto) { estado.hidden = true; return; }
+    estado.append(texto);
+    if (conAcciones) {
+      const reintentar = document.createElement('button');
+      reintentar.type = 'button';
+      reintentar.className = 'cap-enlace';
+      reintentar.textContent = 'Reintentar';
+      reintentar.addEventListener('click', () => desplegar());
+      const afuera = document.createElement('a');
+      afuera.className = 'cap-enlace';
+      afuera.href = enlaceExterno(v);
+      afuera.target = '_blank'; afuera.rel = 'noopener';
+      afuera.textContent = 'Abrir en BibleGateway';
+      estado.append(' ', reintentar, ' · ', afuera);
+    }
+    estado.hidden = false;
+  }
+
+  function actualizarCredito(v) {
+    if (!credito) return;
+    const base = panelActivo()?.dataset.credito || '';
+    const extra = abierto && !(Array.isArray(local[v]) && local[v].length) ? (SERVICIO[v]?.credito || '') : '';
+    credito.textContent = extra ? `${base} ${extra}` : base;
+  }
+
+  function etiquetas() {
     btn.setAttribute('aria-expanded', abierto);
-    btn.classList.toggle('abierto', abierto);
-    accion.textContent = abierto ? `Comprimir ${libro} ${cap}` : `Leer ${libro} ${cap} completo`;
+    articulo.classList.toggle('expandido', abierto);
+    textoBtn.textContent = abierto ? ETIQUETA_ABIERTO : ETIQUETA_CERRADO;
+    if (metaBtn) { metaBtn.textContent = abierto ? '' : META_CERRADO; metaBtn.hidden = abierto || !META_CERRADO; }
   }
 
-  function desplegar() {
-    if (animacion) animacion.cancel();
-    etiquetas(true);
-    panel.hidden = false;
-    cargar(version);
-    if (sinMovimiento() || !panel.animate) return;
-    const alto = panel.scrollHeight;
-    animacion = panel.animate(
-      [{ height: '0px', opacity: 0, overflow: 'hidden' }, { height: alto + 'px', opacity: 1, overflow: 'hidden' }],
-      { duration: 420, easing: 'cubic-bezier(.2,.7,.2,1)' }
-    );
-    animacion.onfinish = () => { animacion = null; };
-  }
-
-  function comprimir(volver) {
-    if (panel.hidden) return;
-    if (animacion) animacion.cancel();
-    etiquetas(false);
-
-    const terminar = () => {
-      animacion = null;
-      panel.hidden = true;
-      if (volver) btn.focus({ preventScroll: true });
-    };
-
-    // Si la persona ya bajó leyendo y el botón quedó fuera de la vista,
-    // se comprime de una vez y la pantalla vuelve al pasaje, con el botón
-    // arriba: así no pasa de largo por el resto de la página.
-    const cabecera = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cabecera-alto')) || 72;
-    const arriba = btn.getBoundingClientRect().top;
-    if (arriba < cabecera) {
-      const destino = window.scrollY + arriba - cabecera - 24;
-      animacion = null;
-      panel.hidden = true;
-      window.scrollTo({ top: destino, behavior: 'instant' });
-      btn.focus({ preventScroll: true });
-      return;
+  async function desplegar() {
+    const v = versionActiva();
+    const panel = panelActivo();
+    const miPedido = ++pedido;
+    btn.disabled = true;
+    btn.classList.add('cargando');
+    textoBtn.textContent = 'Cargando capítulo…';
+    avisar('');
+    try {
+      const datos = await versiculos(v);
+      if (miPedido !== pedido) return;
+      const clave = panel.querySelector(':scope > p:not(.cap-contexto)');
+      quitarContexto();
+      const antes = datos.filter(d => Number(d.verse) < desde);
+      const despues = datos.filter(d => Number(d.verse) > hasta);
+      if (antes.length) clave.before(parrafo('cap-antes', antes));
+      if (despues.length) clave.after(parrafo('cap-despues', despues));
+      abierto = true;
+      etiquetas();
+      actualizarCredito(v);
+      const local_ = Array.isArray(local[v]) && local[v].length;
+      if (!local_ && SERVICIO[v]?.nota) avisar(SERVICIO[v].nota);
+      // Se mantiene el pasaje a la vista: si apareció texto arriba, la pantalla lo compensa
+      if (antes.length) {
+        const r = clave.getBoundingClientRect();
+        if (r.top < 0 || r.top > innerHeight) clave.scrollIntoView({ block: 'start', behavior: sinMovimiento() ? 'auto' : 'smooth' });
+      }
+    } catch (e) {
+      if (miPedido !== pedido) return;
+      abierto = false;
+      etiquetas();
+      avisar('No pudimos cargar el capítulo en este momento.', true, v);
+    } finally {
+      if (miPedido === pedido) { btn.disabled = false; btn.classList.remove('cargando'); }
     }
-    if (sinMovimiento() || !panel.animate) { terminar(); return; }
-    animacion = panel.animate(
-      [{ height: panel.offsetHeight + 'px', opacity: 1, overflow: 'hidden' }, { height: '0px', opacity: 0, overflow: 'hidden' }],
-      { duration: 320, easing: 'cubic-bezier(.4,0,.2,1)' }
-    );
-    animacion.onfinish = terminar;
   }
 
-  btn.addEventListener('click', () => (panel.hidden ? desplegar() : comprimir(true)));
-  document.getElementById('capitulo-cerrar').addEventListener('click', () => comprimir(true));
-  document.getElementById('capitulo-volver').addEventListener('click', () => comprimir(true));
+  function comprimir() {
+    pedido++;
+    const cabecera = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cabecera-alto')) || 72;
+    const arriba = articulo.getBoundingClientRect().top;
+    quitarContexto();
+    abierto = false;
+    etiquetas();
+    avisar('');
+    actualizarCredito(versionActiva());
+    // Si la persona había bajado leyendo, vuelve al inicio de la lectura
+    if (arriba < cabecera) {
+      window.scrollTo({ top: window.scrollY + articulo.getBoundingClientRect().top - cabecera - 16, behavior: 'instant' });
+    }
+    btn.focus({ preventScroll: true });
+  }
 
-  // Si cambian la versión con las pestañas, el capítulo abierto también cambia
-  document.addEventListener('ri:version', e => {
-    version = e.detail;
-    if (!panel.hidden) cargar(version);
+  btn.addEventListener('click', () => (abierto ? comprimir() : desplegar()));
+
+  // Al cambiar de versión con el capítulo abierto, el contexto cambia a esa versión
+  document.addEventListener('ri:version', () => {
+    if (!abierto) { actualizarCredito(versionActiva()); return; }
+    quitarContexto();
+    desplegar();
   });
+
+  etiquetas();
 })();
