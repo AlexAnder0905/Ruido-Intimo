@@ -56,6 +56,14 @@
   };
 
   const cache = {};
+
+  /* Capítulo incluido en la página (opcional):
+     <script type="application/json" id="capitulo-local">{"PDT":[{"verse":1,"text":"…"}, …]}</script>
+     Si la versión elegida está ahí, se muestra al instante, sin internet. */
+  const local = (() => {
+    try { return JSON.parse(document.getElementById('capitulo-local')?.textContent || '{}'); }
+    catch (e) { return {}; }
+  })();
   let version = document.querySelector('.version-tab[aria-selected="true"]')?.dataset.version || 'RVR1960';
   let pedido = 0;
 
@@ -131,6 +139,7 @@
     aviso.hidden = !info.aviso;
     aviso.textContent = info.aviso || '';
 
+    if (Array.isArray(local[v]) && local[v].length) { pintar(local[v]); return; }
     if (cache[info.codigo]) { pintar(cache[info.codigo]); return; }
     cargando();
     for (const url of FUENTES(info.codigo)) {
