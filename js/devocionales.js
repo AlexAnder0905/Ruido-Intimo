@@ -34,6 +34,18 @@ const PROXIMO = {
    (Los títulos 02 a 05 son de EJEMPLO: reemplázalos por los reales.) */
 const DEVOCIONALES = [
   {
+    numero: '09',
+    titulo: 'El pueblo firmó, celebró y cantó, y luego no obedeció',
+    cita: 'Nehemías 13',
+    fecha: '2026-11-10',
+    resumen: 'La obediencia no se mide por la intensidad del momento de compromiso, sino por la fidelidad cuando nadie te está mirando.',
+    temas: ['Obediencia', 'Fidelidad'],
+    pdf: '',
+    leer: 'index.html#devocional',
+    portada: 'img/portadas/semana-09.webp',
+    color: 'verde'
+  },
+  {
     numero: '08',
     titulo: '¿Qué estoy haciendo mientras camino y espero?',
     cita: 'Jeremías 29:7',
@@ -41,7 +53,7 @@ const DEVOCIONALES = [
     resumen: 'Dios nos ha llamado a transformar nuestro entorno, no a ser transformados por quienes viven en nuestro entorno.',
     temas: ['Discipulado', 'Comunidad'],
     pdf: 'pdf/semana-08-mientras-camino-y-espero.pdf',
-    leer: 'index.html#devocional',
+    leer: 'semana-08.html',
     color: 'tinta'
   },
   {

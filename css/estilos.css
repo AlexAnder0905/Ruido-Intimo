@@ -1871,7 +1871,7 @@ h1, h2, h3, p, li, blockquote { overflow-wrap: break-word; }
 /* Aviso en la página de un devocional anterior */
 .aviso-anterior {
   display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  width: max-content; max-width: 100%;
+  width: fit-content; max-width: 100%; box-sizing: border-box;
   margin-bottom: 18px; padding: 8px 14px;
   border: 1px solid var(--linea); border-radius: 999px;
   background: var(--papel); color: var(--tinta-suave);
@@ -1968,3 +1968,27 @@ h1, h2, h3, p, li, blockquote { overflow-wrap: break-word; }
 @media (max-width: 720px) {
   .dev-acciones .btn { white-space: normal; text-align: center; line-height: 1.2; }
 }
+
+/* Listas dentro del devocional (compromisos del pacto, preguntas) */
+.devocional-cuerpo .lista-pacto {
+  margin: 1.4em 0; padding: 0; list-style: none; counter-reset: pacto;
+  display: grid; gap: 12px;
+}
+.devocional-cuerpo .lista-pacto li {
+  counter-increment: pacto;
+  display: grid; grid-template-columns: 2.2em minmax(0, 1fr); align-items: baseline; gap: 6px;
+  padding: 14px 16px; border-radius: 12px;
+  background: color-mix(in srgb, var(--verde-luz) 60%, transparent);
+  border-left: 3px solid var(--verde);
+}
+.devocional-cuerpo .lista-pacto li::before {
+  content: counter(pacto, decimal-leading-zero);
+  font-family: var(--sans); font-size: .8125rem; font-weight: 700; letter-spacing: .06em; color: var(--verde-texto);
+}
+.bloque-preguntas { margin-top: 1.2em; }
+.bloque-preguntas ol { margin: 0; padding-left: 1.3em; display: grid; gap: .6em; }
+.bloque-preguntas li { font-size: 1.1875rem; line-height: 1.45; padding-left: .2em; }
+.bloque-preguntas li::marker { color: var(--verde-texto); font-weight: 700; }
+
+/* La columna de texto del versículo nunca empuja el ancho de la página */
+.hoy-texto { min-width: 0; }
