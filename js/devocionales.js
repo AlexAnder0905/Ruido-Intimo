@@ -34,6 +34,18 @@ const PROXIMO = {
    (Los títulos 02 a 05 son de EJEMPLO: reemplázalos por los reales.) */
 const DEVOCIONALES = [
   {
+    numero: '10',
+    titulo: 'Dependemos en «todo» de Dios',
+    cita: 'Oseas 11',
+    fecha: '2026-11-18',
+    resumen: 'Entender que todos los días tengo necesidad de Su presencia es una declaración de dependencia, no de debilidad.',
+    temas: ['Dependencia', 'Dios Padre'],
+    pdf: '',
+    leer: 'index.html#devocional',
+    portada: 'img/portadas/semana-10.webp',
+    color: 'verde'
+  },
+  {
     numero: '09',
     titulo: 'El pueblo firmó, celebró y cantó, y luego no obedeció',
     cita: 'Nehemías 13',
@@ -41,7 +53,7 @@ const DEVOCIONALES = [
     resumen: 'La obediencia no se mide por la intensidad del momento de compromiso, sino por la fidelidad cuando nadie te está mirando.',
     temas: ['Obediencia', 'Fidelidad'],
     pdf: '',
-    leer: 'index.html#devocional',
+    leer: 'semana-09.html',
     portada: 'img/portadas/semana-09.webp',
     color: 'verde'
   },
