@@ -31,9 +31,9 @@ const PROXIMO = {
 };
 
 /* color: 'verde' | 'tinta' | 'crema' | 'hondo'
-   portada (opcional): imagen propia, ej. 'img/portadas/semana-06.webp'
+   portada (opcional): imagen propia, ej. 'img/portadas/semana-10.webp'
    leer (opcional): página web del devocional
-   (Los títulos 02 a 05 son de EJEMPLO: reemplázalos por los reales.) */
+*/
 const DEVOCIONALES = [
   {
     numero: '10',
@@ -82,67 +82,6 @@ const DEVOCIONALES = [
     leer: 'semana-07.html',
     portada: 'img/portadas/semana-07.webp',
     color: 'hondo'
-  },
-  {
-    numero: '06',
-    titulo: 'Hechos a Su imagen',
-    cita: 'Romanos 8:29',
-    fecha: '2026-10-22',
-    resumen: 'El propósito de Dios no es solo que seas mejor, sino que te parezcas a Su Hijo.',
-    temas: ['Identidad', 'Propósito'],
-    pdf: 'pdf/semana-06-hechos-a-su-imagen.pdf',
-    portada: 'img/portadas/semana-06.webp',
-    color: 'verde'
-  },
-  {
-    numero: '05',
-    titulo: 'La luz que no se apaga',
-    cita: 'Juan 1:5',
-    fecha: '2026-10-15',
-    resumen: 'Ninguna oscuridad que enfrentes ha logrado apagar la luz de Cristo.',
-    temas: ['Esperanza'],
-    pdf: 'pdf/semana-05-la-luz-que-no-se-apaga.pdf',
-    color: 'tinta'
-  },
-  {
-    numero: '04',
-    titulo: 'El silencio también habla',
-    cita: 'Salmo 46:10',
-    fecha: '2026-10-08',
-    resumen: 'Detenerse no es perder el tiempo: es reconocer quién es Dios.',
-    temas: ['Silencio', 'Descanso'],
-    pdf: 'pdf/semana-04-el-silencio-tambien-habla.pdf',
-    color: 'crema'
-  },
-  {
-    numero: '03',
-    titulo: 'Gracia que alcanza',
-    cita: '2 Corintios 12:9',
-    fecha: '2026-10-01',
-    resumen: 'Tu debilidad no es el final de la historia; es el lugar donde Su poder se perfecciona.',
-    temas: ['Gracia'],
-    pdf: 'pdf/semana-03-gracia-que-alcanza.pdf',
-    color: 'hondo'
-  },
-  {
-    numero: '02',
-    titulo: 'Cuando el alma se cansa',
-    cita: 'Mateo 11:28',
-    fecha: '2026-09-24',
-    resumen: 'Jesús no te pide que llegues fuerte. Te invita a llegar como estás.',
-    temas: ['Descanso'],
-    pdf: 'pdf/semana-02-cuando-el-alma-se-cansa.pdf',
-    color: 'verde'
-  },
-  {
-    numero: '01',
-    titulo: 'La relación que transforma',
-    cita: 'Juan 15:5',
-    fecha: '2026-09-17',
-    resumen: 'Permanecer en Cristo es el comienzo de toda transformación verdadera.',
-    temas: ['Identidad', 'Intimidad'],
-    pdf: 'pdf/semana-01-la-relacion-que-transforma.pdf',
-    color: 'tinta'
   }
 ];
 

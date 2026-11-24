@@ -20,7 +20,7 @@ ruido-intimo-sitio/
 ├── js/comentarios.js → Muro "¿Qué te habló Dios hoy?" (conexión a la base de datos)
 ├── img/              → Imagen del día, logos (color y blanco), favicon, grano y fotos
 ├── img/ig/           → Publicaciones de Instagram que se muestran en "¿Qué es?"
-├── pdf/              → PDFs de los devocionales (el 07 al 10 son reales; el 01 al 06 son de EJEMPLO)
+├── pdf/              → PDFs de los devocionales (del 07 al 10, generados con herramientas/crear-pdf.py)
 ├── herramientas/     → crear-pdf.py: genera el PDF de cada devocional con el mismo diseño
 └── fonts/            → Fraunces + Inter alojadas en el sitio (licencia libre OFL)
 ```
@@ -32,8 +32,6 @@ ruido-intimo-sitio/
 | Link del canal de YouTube (`https://www.youtube.com/`) | Las 3 páginas: buscar "REEMPLAZA" y "youtube.com/" |
 | Posts de Instagram del feed | Cambia las imágenes de `img/ig/` y pega el link de cada post en `que-es.html` (sección 7) |
 | Derechos de las fotografías | Confirma que puedes usar en la web las fotos de `img/que-es-*` (vienen de tu moodboard) |
-| PDFs de ejemplo | Carpeta `pdf/`, mismo nombre de archivo o actualiza la ruta en `js/archivo.js` |
-| Títulos de ejemplo (semanas 02 a 05) | `js/archivo.js` |
 | Nombre del autor (hoy dice "Alexander Alva") | `index.html`, tarjeta del devocional y firma |
 | Conexión de comentarios | `js/comentarios.js` (ver sección Comentarios) |
 
