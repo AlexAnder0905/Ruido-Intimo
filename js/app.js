@@ -304,3 +304,30 @@ function mostrarAviso(texto) {
   clearTimeout(temporizadorAviso);
   temporizadorAviso = setTimeout(() => aviso.classList.remove('visible'), 2200);
 }
+
+
+/* ------------------------------------------------------------
+   8. CONCORDANCIAS DESPLEGABLES
+   Cerradas al inicio. El contenido cerrado no recibe foco (inert).
+   El enlace #concordancias (o cualquier enlace a ese ancla) las abre.
+------------------------------------------------------------ */
+(function () {
+  const caja = $('#conc-desplegable');
+  if (!caja) return;
+  const boton = $('#conc-toggle');
+  const panel = $('#conc-panel');
+
+  function abrir(si) {
+    caja.classList.toggle('abierto', si);
+    boton.setAttribute('aria-expanded', si);
+    panel.inert = !si;
+  }
+  boton.addEventListener('click', () => abrir(!caja.classList.contains('abierto')));
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href$="#concordancias"]');
+    if (a) abrir(true);
+  });
+  const segunHash = () => { if (location.hash === '#concordancias') abrir(true); };
+  window.addEventListener('hashchange', segunHash);
+  segunHash();
+})();

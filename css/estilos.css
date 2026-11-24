@@ -989,6 +989,72 @@ body:has(.seleccion:not([hidden])) .piano-flota { bottom: calc(88px + env(safe-a
 }
 
 
+/* Concordancias desplegables: cerradas al inicio, se abren con una animación suave */
+.conc-desplegable {
+  background: var(--papel);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  transition: border-color .3s ease, box-shadow .3s ease;
+}
+.conc-desplegable.abierto { border-color: color-mix(in srgb, var(--verde) 40%, var(--linea)); box-shadow: var(--sombra); }
+.conc-cab { margin: 0; font: inherit; }
+.conc-toggle {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  width: 100%; padding: clamp(20px, 3vw, 32px);
+  text-align: left; border-radius: var(--radio);
+  transition: background-color .2s ease;
+}
+.conc-toggle:hover { background: var(--verde-luz); }
+.conc-toggle:focus-visible { outline: 3px solid var(--verde); outline-offset: 2px; }
+.conc-toggle-texto { display: grid; gap: 10px; min-width: 0; }
+.conc-titulo {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.5rem);
+  line-height: 1.08; letter-spacing: -.02em;
+  font-variation-settings: "opsz" 144;
+}
+.conc-titulo em { font-style: italic; color: var(--verde); }
+.conc-sub { font-size: .9375rem; color: var(--tinta-suave); max-width: 56ch; }
+.conc-toggle-accion {
+  flex: none; display: inline-flex; align-items: center; gap: 10px;
+  height: 44px; padding: 0 8px 0 18px; border-radius: 999px;
+  background: var(--verde); color: var(--sobre-verde);
+  font-size: .875rem; font-weight: 700;
+}
+.conc-toggle-accion svg {
+  width: 28px; height: 28px; padding: 4px; border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform .45s cubic-bezier(.2,.7,.2,1);
+}
+.conc-ocultar, .conc-desplegable.abierto .conc-ver { display: none; }
+.conc-desplegable.abierto .conc-ocultar { display: inline; }
+.conc-desplegable.abierto .conc-toggle-accion svg { transform: rotate(180deg); }
+
+/* El alto se anima de 0 a su tamaño real (grid 0fr → 1fr), sin medir nada con JavaScript */
+.conc-panel {
+  display: grid; grid-template-rows: 0fr; opacity: 0;
+  transition: grid-template-rows .5s cubic-bezier(.2,.7,.2,1), opacity .3s ease;
+}
+.conc-desplegable.abierto .conc-panel { grid-template-rows: 1fr; opacity: 1; transition: grid-template-rows .5s cubic-bezier(.2,.7,.2,1), opacity .45s ease .08s; }
+.conc-panel-int { min-height: 0; overflow: hidden; }
+.conc-cuerpo { display: grid; gap: 24px; padding: 4px clamp(20px, 3vw, 32px) clamp(24px, 3vw, 32px); }
+/* Las tarjetas entran una tras otra cada vez que se abre */
+.conc-desplegable.abierto .conc { animation: aparecer .55s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--d, 0) * 80ms + 160ms); }
+.conc-cuerpo .conc { background: var(--crema); }
+@media (max-width: 560px) {
+  .conc-n { display: none; }
+  .conc-toggle { align-items: flex-start; }
+  .conc-toggle-accion { padding: 0; width: 44px; justify-content: center; }
+  .conc-ver, .conc-ocultar, .conc-desplegable.abierto .conc-ocultar { display: none; }
+  .conc-toggle-accion svg { background: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .conc-panel, .conc-desplegable.abierto .conc-panel, .conc-toggle-accion svg { transition: none; }
+  .conc-desplegable.abierto .conc { animation: none; }
+}
+
+
 /* ------------------------------------------------------------
    09. DEVOCIONAL
 ------------------------------------------------------------ */
