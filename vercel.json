@@ -1,5 +1,6 @@
 {
   "cleanUrls": false,
+  "crons": [{ "path": "/api/ping", "schedule": "0 14 * * *" }],
   "headers": [
     {
       "source": "/(fonts|img|audio)/(.*)",

@@ -26,6 +26,7 @@
   </script>
 
   <!-- Tipografías propias: se precargan las que se ven primero -->
+  <link rel="preload" href="fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/fraunces-italic.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
 
@@ -48,8 +49,8 @@
     <div class="contenedor cabecera-inner">
       <!-- Logotipo: versión a color (modo día) y blanca (modo noche) -->
       <a href="index.html" class="marca" aria-label="Ruido Íntimo — inicio">
-        <img class="logo logo-color"  src="img/logo-color.png"  alt="" width="800" height="322">
-        <img class="logo logo-blanco" src="img/logo-blanco.png" alt="" width="800" height="322">
+        <img class="logo logo-color"  src="img/logo-color-sm.png"  alt="" width="800" height="322">
+        <img class="logo logo-blanco" src="img/logo-blanco-sm.png" alt="" width="800" height="322">
       </a>
 
       <nav class="nav" aria-label="Principal">
@@ -268,80 +269,14 @@
 
 
     <!-- ============================================================
-         3. CONCORDANCIAS
-    ============================================================ -->
-    <section class="seccion seccion-tinte" id="concordancias" aria-labelledby="titulo-conc">
-      <div class="contenedor">
-
-        <header class="seccion-cabecera revelar">
-          <p class="eyebrow"><span class="num">02</span> Concordancias</p>
-          <h2 id="titulo-conc" class="titulo-seccion">La Escritura <em>ilumina</em> la Escritura</h2>
-          <p class="bajada">Pasajes que acompañan Nehemías 13 y los textos que aparecen en el devocional. Se muestran en la versión que elijas.</p>
-        </header>
-
-        <div class="versiones versiones-conc revelar" role="tablist" aria-label="Versión de las concordancias">
-          <button type="button" role="tab" class="version-tab" data-version="RVR1960" aria-selected="true"  title="Reina-Valera 1960">RVR1960</button>
-          <button type="button" role="tab" class="version-tab" data-version="NBLA"    aria-selected="false" title="Nueva Biblia de las Américas">NBLA</button>
-          <button type="button" role="tab" class="version-tab" data-version="NTV"     aria-selected="false" title="Nueva Traducción Viviente">NTV</button>
-          <button type="button" role="tab" class="version-tab" data-version="PDT"     aria-selected="false" title="Palabra de Dios para Todos">PDT</button>
-        </div>
-
-        <!-- Cada concordancia tiene un texto por versión (data-version-texto) -->
-        <div class="concordancias">
-          <article class="conc revelar" style="--d:0">
-            <p class="conc-tema">La promesa del pueblo</p>
-            <h3 class="conc-ref">Nehemías 10:39 <span class="chip" data-version-nombre>RVR1960</span></h3>
-            <blockquote class="conc-texto" data-version-texto="RVR1960">«…y no abandonaremos la casa de nuestro Dios.»</blockquote>
-            <blockquote class="conc-texto" data-version-texto="NBLA" hidden>«…Así no descuidaremos la casa de nuestro Dios.»</blockquote>
-            <blockquote class="conc-texto" data-version-texto="NTV" hidden>«…Todos nos comprometemos a no descuidar el templo de nuestro Dios.»</blockquote>
-            <blockquote class="conc-texto" data-version-texto="PDT" hidden>«…Nos comprometimos a no descuidar el templo de nuestro Dios.»</blockquote>
-            <p class="conc-nota">Lo que el pueblo firmó. Años después, Nehemías encuentra abandonada esa misma casa (13:11).</p>
-          </article>
-
-          <article class="conc revelar" style="--d:1">
-            <p class="conc-tema">Somos templo</p>
-            <h3 class="conc-ref">1 Corintios 3:16 <span class="chip" data-version-nombre>RVR1960</span></h3>
-            <blockquote class="conc-texto" data-version-texto="RVR1960">«¿No sabéis que sois templo de Dios, y que el Espíritu de Dios mora en vosotros?»</blockquote>
-            <blockquote class="conc-texto" data-version-texto="NBLA" hidden>«¿No saben que ustedes son templo de Dios y que el Espíritu de Dios habita en ustedes?»</blockquote>
-            <blockquote class="conc-texto" data-version-texto="NTV" hidden>«¿No se dan cuenta de que todos ustedes juntos son el templo de Dios y que el Espíritu de Dios vive en ustedes?»</blockquote>
-            <blockquote class="conc-texto" data-version-texto="PDT" hidden>«Ustedes deberían saber que son el templo de Dios y el Espíritu de Dios vive en ustedes.»</blockquote>
-            <p class="conc-nota">Lo que pasó en el templo de Jerusalén nos habla hoy: Dios habita en Su pueblo.</p>
-          </article>
-
-          <article class="conc revelar" style="--d:2">
-            <p class="conc-tema">Un corazón nuevo</p>
-            <h3 class="conc-ref">Ezequiel 36:26 <span class="chip" data-version-nombre>RVR1960</span></h3>
-            <blockquote class="conc-texto" data-version-texto="RVR1960">«Os daré corazón nuevo, y pondré espíritu nuevo dentro de vosotros; y quitaré de vuestra carne el corazón de piedra, y os daré un corazón de carne.»</blockquote>
-            <blockquote class="conc-texto" data-version-texto="NBLA" hidden>«Además, les daré un corazón nuevo y pondré un espíritu nuevo dentro de ustedes; quitaré de su carne el corazón de piedra y les daré un corazón de carne.»</blockquote>
-            <blockquote class="conc-texto" data-version-texto="NTV" hidden>«Les daré un corazón nuevo y pondré un espíritu nuevo dentro de ustedes. Les quitaré ese terco corazón de piedra y les daré un corazón tierno y receptivo.»</blockquote>
-            <blockquote class="conc-texto" data-version-texto="PDT" hidden>«Les daré un corazón nuevo y les infundiré un nuevo espíritu. Les quitaré ese corazón de piedra y pondré uno de carne.»</blockquote>
-            <p class="conc-nota">Lo que ningún líder pudo hacer, Dios lo promete: cambiar el corazón desde adentro.</p>
-          </article>
-
-          <article class="conc revelar" style="--d:3">
-            <p class="conc-tema">Un pacto escrito en el corazón</p>
-            <h3 class="conc-ref">Jeremías 31:33 <span class="chip" data-version-nombre>RVR1960</span></h3>
-            <blockquote class="conc-texto" data-version-texto="RVR1960">«Pero este es el pacto que haré con la casa de Israel después de aquellos días, dice Jehová: Daré mi ley en su mente, y la escribiré en su corazón; y yo seré a ellos por Dios, y ellos me serán por pueblo.»</blockquote>
-            <blockquote class="conc-texto" data-version-texto="NBLA" hidden>«Porque este es el pacto que haré con la casa de Israel después de aquellos días —declara el Señor—. Pondré Mi ley dentro de ellos, y sobre sus corazones la escribiré. Entonces Yo seré su Dios y ellos serán Mi pueblo.»</blockquote>
-            <blockquote class="conc-texto" data-version-texto="NTV" hidden>«Pero este es el nuevo pacto que haré con el pueblo de Israel en ese día —dice el Señor—. Pondré mis instrucciones en lo más profundo de ellos y las escribiré en su corazón. Yo seré su Dios y ellos serán mi pueblo.»</blockquote>
-            <blockquote class="conc-texto" data-version-texto="PDT" hidden>«Este es el pacto que haré con el pueblo de Israel después de esos días, dice el Señor: Pondré mi ley dentro de ellos y la escribiré en su corazón. Yo seré su Dios y ellos serán mi pueblo.»</blockquote>
-            <p class="conc-nota">La diferencia entre un pacto firmado en papel y uno escrito en el corazón.</p>
-          </article>
-        </div>
-
-      </div>
-    </section>
-
-
-    <!-- ============================================================
-         4. DEVOCIONAL (tu escrito)
+         3. DEVOCIONAL (tu escrito)
     ============================================================ -->
     <section class="seccion" id="devocional" aria-labelledby="titulo-devocional">
       <article class="devocional" id="devocional-articulo">
 
         <!-- Texto del autor: ordenado y con ortografía corregida, sin cambiar su voz -->
         <header class="devocional-cabecera revelar">
-          <p class="eyebrow"><span class="num">03</span> Devocional</p>
+          <p class="eyebrow"><span class="num">02</span> Devocional</p>
           <h2 id="titulo-devocional" class="devocional-titulo">El pueblo firmó, celebró y cantó, <em>y luego no obedeció.</em></h2>
           <p class="devocional-bajada">La obediencia no se mide por la intensidad del momento de compromiso, sino por la fidelidad cuando nadie te está mirando.</p>
 
@@ -435,6 +370,72 @@
         </footer>
 
       </article>
+    </section>
+
+
+    <!-- ============================================================
+         4. CONCORDANCIAS (después del devocional)
+    ============================================================ -->
+    <section class="seccion seccion-tinte" id="concordancias" aria-labelledby="titulo-conc">
+      <div class="contenedor">
+
+        <header class="seccion-cabecera revelar">
+          <p class="eyebrow"><span class="num">03</span> Concordancias</p>
+          <h2 id="titulo-conc" class="titulo-seccion">La Escritura <em>ilumina</em> la Escritura</h2>
+          <p class="bajada">Pasajes que acompañan Nehemías 13 y los textos que aparecen en el devocional. Se muestran en la versión que elijas.</p>
+        </header>
+
+        <div class="versiones versiones-conc revelar" role="tablist" aria-label="Versión de las concordancias">
+          <button type="button" role="tab" class="version-tab" data-version="RVR1960" aria-selected="true"  title="Reina-Valera 1960">RVR1960</button>
+          <button type="button" role="tab" class="version-tab" data-version="NBLA"    aria-selected="false" title="Nueva Biblia de las Américas">NBLA</button>
+          <button type="button" role="tab" class="version-tab" data-version="NTV"     aria-selected="false" title="Nueva Traducción Viviente">NTV</button>
+          <button type="button" role="tab" class="version-tab" data-version="PDT"     aria-selected="false" title="Palabra de Dios para Todos">PDT</button>
+        </div>
+
+        <!-- Cada concordancia tiene un texto por versión (data-version-texto) -->
+        <div class="concordancias">
+          <article class="conc revelar" style="--d:0">
+            <p class="conc-tema">La promesa del pueblo</p>
+            <h3 class="conc-ref">Nehemías 10:39 <span class="chip" data-version-nombre>RVR1960</span></h3>
+            <blockquote class="conc-texto" data-version-texto="RVR1960">«…y no abandonaremos la casa de nuestro Dios.»</blockquote>
+            <blockquote class="conc-texto" data-version-texto="NBLA" hidden>«…Así no descuidaremos la casa de nuestro Dios.»</blockquote>
+            <blockquote class="conc-texto" data-version-texto="NTV" hidden>«…Todos nos comprometemos a no descuidar el templo de nuestro Dios.»</blockquote>
+            <blockquote class="conc-texto" data-version-texto="PDT" hidden>«…Nos comprometimos a no descuidar el templo de nuestro Dios.»</blockquote>
+            <p class="conc-nota">Lo que el pueblo firmó. Años después, Nehemías encuentra abandonada esa misma casa (13:11).</p>
+          </article>
+
+          <article class="conc revelar" style="--d:1">
+            <p class="conc-tema">Somos templo</p>
+            <h3 class="conc-ref">1 Corintios 3:16 <span class="chip" data-version-nombre>RVR1960</span></h3>
+            <blockquote class="conc-texto" data-version-texto="RVR1960">«¿No sabéis que sois templo de Dios, y que el Espíritu de Dios mora en vosotros?»</blockquote>
+            <blockquote class="conc-texto" data-version-texto="NBLA" hidden>«¿No saben que ustedes son templo de Dios y que el Espíritu de Dios habita en ustedes?»</blockquote>
+            <blockquote class="conc-texto" data-version-texto="NTV" hidden>«¿No se dan cuenta de que todos ustedes juntos son el templo de Dios y que el Espíritu de Dios vive en ustedes?»</blockquote>
+            <blockquote class="conc-texto" data-version-texto="PDT" hidden>«Ustedes deberían saber que son el templo de Dios y el Espíritu de Dios vive en ustedes.»</blockquote>
+            <p class="conc-nota">Lo que pasó en el templo de Jerusalén nos habla hoy: Dios habita en Su pueblo.</p>
+          </article>
+
+          <article class="conc revelar" style="--d:2">
+            <p class="conc-tema">Un corazón nuevo</p>
+            <h3 class="conc-ref">Ezequiel 36:26 <span class="chip" data-version-nombre>RVR1960</span></h3>
+            <blockquote class="conc-texto" data-version-texto="RVR1960">«Os daré corazón nuevo, y pondré espíritu nuevo dentro de vosotros; y quitaré de vuestra carne el corazón de piedra, y os daré un corazón de carne.»</blockquote>
+            <blockquote class="conc-texto" data-version-texto="NBLA" hidden>«Además, les daré un corazón nuevo y pondré un espíritu nuevo dentro de ustedes; quitaré de su carne el corazón de piedra y les daré un corazón de carne.»</blockquote>
+            <blockquote class="conc-texto" data-version-texto="NTV" hidden>«Les daré un corazón nuevo y pondré un espíritu nuevo dentro de ustedes. Les quitaré ese terco corazón de piedra y les daré un corazón tierno y receptivo.»</blockquote>
+            <blockquote class="conc-texto" data-version-texto="PDT" hidden>«Les daré un corazón nuevo y les infundiré un nuevo espíritu. Les quitaré ese corazón de piedra y pondré uno de carne.»</blockquote>
+            <p class="conc-nota">Lo que ningún líder pudo hacer, Dios lo promete: cambiar el corazón desde adentro.</p>
+          </article>
+
+          <article class="conc revelar" style="--d:3">
+            <p class="conc-tema">Un pacto escrito en el corazón</p>
+            <h3 class="conc-ref">Jeremías 31:33 <span class="chip" data-version-nombre>RVR1960</span></h3>
+            <blockquote class="conc-texto" data-version-texto="RVR1960">«Pero este es el pacto que haré con la casa de Israel después de aquellos días, dice Jehová: Daré mi ley en su mente, y la escribiré en su corazón; y yo seré a ellos por Dios, y ellos me serán por pueblo.»</blockquote>
+            <blockquote class="conc-texto" data-version-texto="NBLA" hidden>«Porque este es el pacto que haré con la casa de Israel después de aquellos días —declara el Señor—. Pondré Mi ley dentro de ellos, y sobre sus corazones la escribiré. Entonces Yo seré su Dios y ellos serán Mi pueblo.»</blockquote>
+            <blockquote class="conc-texto" data-version-texto="NTV" hidden>«Pero este es el nuevo pacto que haré con el pueblo de Israel en ese día —dice el Señor—. Pondré mis instrucciones en lo más profundo de ellos y las escribiré en su corazón. Yo seré su Dios y ellos serán mi pueblo.»</blockquote>
+            <blockquote class="conc-texto" data-version-texto="PDT" hidden>«Este es el pacto que haré con el pueblo de Israel después de esos días, dice el Señor: Pondré mi ley dentro de ellos y la escribiré en su corazón. Yo seré su Dios y ellos serán mi pueblo.»</blockquote>
+            <p class="conc-nota">La diferencia entre un pacto firmado en papel y uno escrito en el corazón.</p>
+          </article>
+        </div>
+
+      </div>
     </section>
 
 
@@ -543,8 +544,8 @@
   <footer class="pie">
     <div class="contenedor pie-inner">
       <a href="index.html" class="pie-marca" aria-label="Ruido Íntimo — inicio">
-        <img class="logo logo-color"  src="img/logo-color.png"  alt="" width="800" height="322" loading="lazy">
-        <img class="logo logo-blanco" src="img/logo-blanco.png" alt="" width="800" height="322" loading="lazy">
+        <img class="logo logo-color"  src="img/logo-color-sm.png"  alt="" width="800" height="322" loading="lazy">
+        <img class="logo logo-blanco" src="img/logo-blanco-sm.png" alt="" width="800" height="322" loading="lazy">
       </a>
       <p class="pie-lema">Un devocional nuevo cada miércoles.</p>
       <nav class="pie-nav" aria-label="Pie de página">

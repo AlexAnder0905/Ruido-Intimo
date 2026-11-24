@@ -6,7 +6,9 @@
    · el inicio (aviso del próximo devocional)
 
    ► PARA AGREGAR UN DEVOCIONAL NUEVO
-     1. Sube el PDF a la carpeta /pdf
+     1. Crea el PDF con el mismo diseño de todos:
+        python3 herramientas/crear-pdf.py index.html
+        (queda en /pdf; escribe su ruta en el campo pdf)
      2. Copia un bloque { ... } de DEVOCIONALES, pégalo ARRIBA
         de la lista y cambia sus datos.
      El aviso «Próximamente» avanza solo al miércoles siguiente.
@@ -40,7 +42,7 @@ const DEVOCIONALES = [
     fecha: '2026-11-18',
     resumen: 'Entender que todos los días tengo necesidad de Su presencia es una declaración de dependencia, no de debilidad.',
     temas: ['Dependencia', 'Dios Padre'],
-    pdf: '',
+    pdf: 'pdf/semana-10-dependemos-en-todo-de-dios.pdf',
     leer: 'index.html#devocional',
     portada: 'img/portadas/semana-10.webp',
     color: 'verde'
@@ -52,7 +54,7 @@ const DEVOCIONALES = [
     fecha: '2026-11-11',
     resumen: 'La obediencia no se mide por la intensidad del momento de compromiso, sino por la fidelidad cuando nadie te está mirando.',
     temas: ['Obediencia', 'Fidelidad'],
-    pdf: '',
+    pdf: 'pdf/semana-09-el-pueblo-firmo-celebro-y-canto.pdf',
     leer: 'semana-09.html',
     portada: 'img/portadas/semana-09.webp',
     color: 'verde'

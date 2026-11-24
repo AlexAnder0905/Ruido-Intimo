@@ -10,7 +10,7 @@ Sitio estático (HTML + CSS + JavaScript, sin librerías ni instalación). Funci
 
 ```
 ruido-intimo-sitio/
-├── index.html        → Página "Hoy": versículo del día, pasaje, concordancias y devocional
+├── index.html        → Página "Hoy": versículo del día, pasaje, devocional y concordancias (al final del devocional)
 ├── archivo.html      → Página "Archivo": devocionales en PDF y videos de YouTube
 ├── que-es.html       → Página "¿Qué es Ruido Íntimo?" + sección Comunidad (#comunidad)
 ├── css/estilos.css   → Todo el diseño (colores en la sección 01)
@@ -20,7 +20,8 @@ ruido-intimo-sitio/
 ├── js/comentarios.js → Muro "¿Qué te habló Dios hoy?" (conexión a la base de datos)
 ├── img/              → Imagen del día, logos (color y blanco), favicon, grano y fotos
 ├── img/ig/           → Publicaciones de Instagram que se muestran en "¿Qué es?"
-├── pdf/              → PDFs de los devocionales (los actuales son de EJEMPLO)
+├── pdf/              → PDFs de los devocionales (el 07 al 10 son reales; el 01 al 06 son de EJEMPLO)
+├── herramientas/     → crear-pdf.py: genera el PDF de cada devocional con el mismo diseño
 └── fonts/            → Fraunces + Inter alojadas en el sitio (licencia libre OFL)
 ```
 
@@ -129,6 +130,21 @@ create policy "visitantes envian pendientes" on comentarios for insert to anon
 y pon `moderacion: true` en `js/comentarios.js`.
 
 Cada devocional tiene su propio muro según `data-devocional` en el formulario (ej. `santiago-1-12`). Cámbialo al publicar uno nuevo.
+
+## PDF de cada devocional (mismo diseño para todos)
+
+Un solo comando crea el PDF a partir de la página del devocional, así la web y el PDF dicen siempre lo mismo.
+Orden fijo: portada → devocional → concordancias → contraportada con las redes. Necesita Python y Google Chrome (nada más).
+
+```bash
+python3 herramientas/crear-pdf.py index.html        # el devocional de hoy
+python3 herramientas/crear-pdf.py semana-09.html    # uno anterior
+python3 herramientas/crear-pdf.py --todos           # todos los que tienen página
+```
+
+El PDF queda en `pdf/` y su ruta va en el campo `pdf` de `js/devocionales.js`. Las redes de la contraportada
+se cambian arriba en `herramientas/crear-pdf.py` (diccionario `REDES`; YouTube se muestra cuando le pongas el canal real).
+Si corriges un texto del devocional, vuelve a correr el comando para regenerar su PDF.
 
 ## Agregar un devocional (página «Devocionales»)
 

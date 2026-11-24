@@ -41,6 +41,39 @@
     '<span class="piano-ondas" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>';
   const fabTexto = fab.querySelector('.piano-fab-texto');
 
+  /* Volumen flotante: botón con altavoz que abre un panel con silencio + barra.
+     Va junto al botón del piano para ajustar el sonido desde cualquier parte. */
+  const ICO_VOL  = '<svg class="ico-vol" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>';
+  const ICO_MUTE = '<svg class="ico-mute" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 9l5 6M22 9l-5 6"/></svg>';
+  const flota = document.createElement('div');
+  flota.className = 'piano-flota';
+  // El botón va antes del panel para que, al abrirlo, el teclado (Tab) entre directo a silencio y barra
+  flota.innerHTML =
+    '<button type="button" class="piano-volbtn" aria-label="Ajustar volumen" aria-expanded="false" aria-controls="piano-panel">' + ICO_VOL + ICO_MUTE + '</button>' +
+    '<div class="piano-panel" id="piano-panel" role="group" aria-label="Volumen del piano">' +
+      '<button type="button" class="piano-mute" aria-label="Silenciar">' + ICO_VOL + ICO_MUTE + '</button>' +
+      '<input type="range" class="piano-rango" min="0" max="100" step="1" aria-label="Volumen">' +
+      '<output class="piano-nivel" aria-hidden="true"></output>' +
+    '</div>';
+  const volBtn   = flota.querySelector('.piano-volbtn');
+  const panel    = flota.querySelector('.piano-panel');
+  const muteFlot = flota.querySelector('.piano-mute');
+  const rangoFlot = flota.querySelector('.piano-rango');
+  const nivelTxt = flota.querySelector('.piano-nivel');
+  let cierre = 0;
+  function panelAbrir(abrir) {
+    clearTimeout(cierre);
+    flota.classList.toggle('vol-abierto', abrir);
+    volBtn.setAttribute('aria-expanded', abrir);
+    // Se cierra solo a los 4 s sin tocarlo, para no estorbar la lectura
+    if (abrir) cierre = setTimeout(() => { if (!flota.matches(':hover') && !panel.contains(document.activeElement)) panelAbrir(false); }, 4000);
+  }
+  volBtn.addEventListener('click', () => panelAbrir(!flota.classList.contains('vol-abierto')));
+  panel.addEventListener('pointerdown', () => panelAbrir(true));
+  panel.addEventListener('input', () => panelAbrir(true));
+  document.addEventListener('pointerdown', e => { if (!flota.contains(e.target)) panelAbrir(false); });
+  flota.addEventListener('keydown', e => { if (e.key === 'Escape') { panelAbrir(false); volBtn.focus(); } });
+
   let sonando = false;
   let silencio = false;
   let volumen = 40;
@@ -52,25 +85,32 @@
   // Curva suave: el oído percibe el volumen de forma logarítmica
   const nivel = () => silencio ? 0 : Math.pow(volumen / 100, 2) * 0.9;
 
+  // Las dos barras (la del reproductor y la flotante) muestran siempre lo mismo
   function pintarSlider() {
-    slider.style.setProperty('--lleno', slider.value + '%');
+    [slider, rangoFlot].forEach(s => { s.value = volumen; s.style.setProperty('--lleno', volumen + '%'); });
+    nivelTxt.textContent = silencio ? '0' : volumen;
+    volBtn.setAttribute('aria-label', 'Ajustar volumen (' + (silencio ? 'en silencio' : volumen + ' %') + ')');
   }
 
-  slider.addEventListener('input', () => {
-    volumen = Number(slider.value);
+  function cambiarVolumen(v) {
+    volumen = Number(v);
     if (volumen > 0 && silencio) alternarSilencio(false);
     pintarSlider();
     aplicarVolumen();
     try { localStorage.setItem('ri-piano-vol', volumen); } catch (e) {}
-  });
+  }
+  slider.addEventListener('input', () => cambiarVolumen(slider.value));
+  rangoFlot.addEventListener('input', () => cambiarVolumen(rangoFlot.value));
 
   function alternarSilencio(forzar) {
     silencio = typeof forzar === 'boolean' ? forzar : !silencio;
-    caja.classList.toggle('silencio', silencio);
-    btnMute.setAttribute('aria-label', silencio ? 'Activar sonido' : 'Silenciar');
+    [caja, flota].forEach(el => el.classList.toggle('silencio', silencio));
+    [btnMute, muteFlot].forEach(b => b.setAttribute('aria-label', silencio ? 'Activar sonido' : 'Silenciar'));
+    pintarSlider();
     aplicarVolumen();
   }
   btnMute.addEventListener('click', () => alternarSilencio());
+  muteFlot.addEventListener('click', () => alternarSilencio());
 
 
   /* ============================================================
@@ -92,7 +132,12 @@
       audio.preload = 'auto';
       try { audio.load(); } catch (e) {}
     };
-    if ('IntersectionObserver' in window) {
+    // Con ahorro de datos o conexión muy lenta no se descarga sola (4 MB): solo al tocar el botón
+    const red = navigator.connection;
+    const redLenta = red && (red.saveData || /(^|-)2g$/.test(red.effectiveType || ''));
+    if (redLenta) {
+      /* se descargará al tocar «play» */
+    } else if ('IntersectionObserver' in window) {
       const vigia = new IntersectionObserver(entradas => {
         if (entradas.some(en => en.isIntersecting)) { precargar(); vigia.disconnect(); }
       }, { rootMargin: '600px 0px' });
@@ -335,6 +380,8 @@
   if (audio) {
     fab.addEventListener('pointerenter', () => { if (audio.preload !== 'auto') { audio.preload = 'auto'; try { audio.load(); } catch (e) {} } }, { once: true });
   }
-  document.body.appendChild(fab);
+  flota.appendChild(fab);
+  document.body.appendChild(flota);
+  pintarSlider();
   actualizarUI();
 })();
