@@ -18,11 +18,15 @@ USO (desde la carpeta del sitio):
 
 El PDF queda en /pdf; después escribe su nombre en js/devocionales.js (campo pdf).
 """
-import html, re, subprocess, sys, tempfile, unicodedata
+import html, os, re, shutil, subprocess, sys, tempfile, unicodedata
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
-CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+CHROME = next((c for c in (
+    os.environ.get('CHROME', ''),
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    shutil.which('google-chrome') or '', shutil.which('chromium') or '', shutil.which('chromium-browser') or '',
+) if c and Path(c).exists()), '')
 
 # Redes de la contraportada. Si un valor queda vacío, esa red no se muestra.
 REDES = {
@@ -67,7 +71,7 @@ def leer_pagina(ruta):
     for a in re.findall(r'<article class="conc[ "].*?</article>', t, re.S):
         tema = quitar_tags(re.search(r'<p class="conc-tema">(.*?)</p>', a, re.S).group(1))
         ref = quitar_tags(re.sub(r'<span class="chip".*?</span>', '', re.search(r'<h3 class="conc-ref">(.*?)</h3>', a, re.S).group(1), flags=re.S))
-        txt = quitar_tags(re.search(r'data-version-texto="RVR1960">(.*?)</blockquote>', a, re.S).group(1))
+        txt = quitar_tags(re.search(r'data-version-texto="PDT">(.*?)</blockquote>', a, re.S).group(1))
         nota = quitar_tags(re.search(r'<p class="conc-nota">(.*?)</p>', a, re.S).group(1))
         d['conc'].append((tema, ref, txt, nota))
     return d
@@ -112,7 +116,7 @@ def construir_html(d, base='..'):
             redes += f'<li><span class="red-ico">{ico}</span><span><b>{rotulo}</b><br>{html.escape(nombre)}</span></li>'
     conc = ''.join(
         f'<article class="conc"><p class="conc-tema">{html.escape(tema)}</p>'
-        f'<h3 class="conc-ref">{html.escape(ref)} <span class="chip">RVR1960</span></h3>'
+        f'<h3 class="conc-ref">{html.escape(ref)} <span class="chip">PDT</span></h3>'
         f'<blockquote>{html.escape(txt)}</blockquote>'
         f'<p class="conc-nota">{html.escape(nota)}</p></article>'
         for tema, ref, txt, nota in d['conc'])
@@ -245,7 +249,7 @@ body {{ font-family:var(--serif); color:var(--tinta); background:var(--crema); }
     <p class="eyebrow">Devocional N.º {num} · {html.escape(d['cita'])}</p>
     <h1>{d['titulo']}</h1>
     <p class="bajada">{html.escape(d['bajada'])}</p>
-    <div class="autor"><span class="av">AA</span><div><b>{html.escape(d['autor'])}</b><span>{fecha_larga(d['fecha_iso'])} · {html.escape(d['cita'])} · {html.escape(d['lectura'])}</span></div></div>
+    <div class="autor"><span class="av">{html.escape(''.join(w[0] for w in d['autor'].split()[:2]).upper())}</span><div><b>{html.escape(d['autor'])}</b><span>{fecha_larga(d['fecha_iso'])} · {html.escape(d['cita'])} · {html.escape(d['lectura'])}</span></div></div>
   </header>
   <div class="cuerpo">
 {cuerpo}
@@ -256,7 +260,7 @@ body {{ font-family:var(--serif); color:var(--tinta); background:var(--crema); }
   <section class="concs">
     <p class="eyebrow">Concordancias</p>
     <h2>La Escritura <em>ilumina</em> la Escritura</h2>
-    <p class="intro">Pasajes que acompañan {html.escape(d['cita'])} y las ideas del devocional (Reina-Valera 1960). En la web puedes verlos también en NBLA, NTV y PDT.</p>
+    <p class="intro">Pasajes que acompañan {html.escape(d['cita'])} y las ideas del devocional (Palabra de Dios para Todos). En la web puedes verlos también en RVR1960, NBLA y NTV.</p>
     {conc}
   </section>
 </main>

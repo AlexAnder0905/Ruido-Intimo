@@ -36,6 +36,18 @@ const PROXIMO = {
 */
 const DEVOCIONALES = [
   {
+    numero: '11',
+    titulo: '¿Anhelamos la prueba?',
+    cita: 'Santiago 1',
+    fecha: '2026-11-25',
+    resumen: 'La prueba tiene el potencial de fortalecer nuestra fe, producir perseverancia y llevarnos a la madurez espiritual.',
+    temas: ['Pruebas', 'Sabiduría'],
+    pdf: 'pdf/semana-11-anhelamos-la-prueba.pdf',
+    leer: 'index.html#devocional',
+    portada: 'img/portadas/semana-11.webp',
+    color: 'verde'
+  },
+  {
     numero: '10',
     titulo: 'Dependemos en «todo» de Dios',
     cita: 'Oseas 11',
@@ -43,7 +55,7 @@ const DEVOCIONALES = [
     resumen: 'Entender que todos los días tengo necesidad de Su presencia es una declaración de dependencia, no de debilidad.',
     temas: ['Dependencia', 'Dios Padre'],
     pdf: 'pdf/semana-10-dependemos-en-todo-de-dios.pdf',
-    leer: 'index.html#devocional',
+    leer: 'semana-10.html',
     portada: 'img/portadas/semana-10.webp',
     color: 'verde'
   },

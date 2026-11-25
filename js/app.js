@@ -269,7 +269,7 @@ $$('.version-tab').forEach(tab => {
     sig.focus(); sig.click();
   });
 });
-if ($('.version-tab')) aplicarVersion(leer('ri-version') || 'RVR1960', false);
+if ($('.version-tab')) aplicarVersion(leer('ri-version') || 'PDT', false);
 
 /* Tamaño de letra para lectura (se recuerda en el navegador) */
 const TAMANOS = [1, 1.0625, 1.125, 1.1875, 1.3125, 1.4375];   // en rem
