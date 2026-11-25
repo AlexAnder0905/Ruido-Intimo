@@ -32,7 +32,7 @@ ruido-intimo-sitio/
 | Link del canal de YouTube (`https://www.youtube.com/`) | Las 3 páginas: buscar "REEMPLAZA" y "youtube.com/" |
 | Posts de Instagram del feed | Cambia las imágenes de `img/ig/` y pega el link de cada post en `que-es.html` (sección 7) |
 | Derechos de las fotografías | Confirma que puedes usar en la web las fotos de `img/que-es-*` (vienen de tu moodboard) |
-| Nombre del autor (hoy dice "Alexander Alva") | `index.html`, tarjeta del devocional y firma |
+| Nombre del autor (hoy dice "Jonathan Alva") | `index.html`, tarjeta del devocional y firma |
 | Conexión de comentarios | `js/comentarios.js` (ver sección Comentarios) |
 
 ## Logotipo
